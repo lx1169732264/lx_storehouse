@@ -15,7 +15,6 @@ import java.util.List;
  * @author: lx
  **/
 @RestController
-@CrossOrigin
 @RequestMapping("loginfo")
 public class LoginfoController {
 

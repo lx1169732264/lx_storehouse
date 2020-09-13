@@ -12,13 +12,14 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * 获取token
- * @author: lx
+ * @program: 0812erp
+ * @author: 雷哥
+ * @create: 2020-01-04 10:03
  **/
 @Configuration
-public class TokenWebSessionManager extends DefaultWebSessionManager {
+public class TokenWebSessionManager   extends DefaultWebSessionManager {
 
-    private static final String TOKEN_HEADER = "TOKEN";
+    private static final String TOKEN_HEADER = "TOKEN" ;
 
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {

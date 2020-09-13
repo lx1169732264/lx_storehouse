@@ -1,6 +1,5 @@
 package com.lx.sys.config;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.shiro.web.filter.authc.UserFilter;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  **/
 
 public class OptionsAccessControlFilter extends UserFilter {
+
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletResponse httpResponse = (HttpServletResponse) response;

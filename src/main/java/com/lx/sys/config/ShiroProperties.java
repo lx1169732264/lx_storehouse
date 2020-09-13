@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @program: 0812springboot
- * @author: 雷哥
+ * @author: lx
  * @create: 2019-12-18 15:59
  **/
 @ConfigurationProperties(prefix = "shiro")

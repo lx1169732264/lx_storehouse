@@ -2,7 +2,7 @@ package com.lx.sys.config;
 
 
 import com.lx.sys.common.ActiveUser;
-import com.lx.sys.config.Constant;
+import com.lx.sys.common.Constant;
 import com.lx.sys.domain.User;
 import com.lx.sys.service.MenuService;
 import com.lx.sys.service.UserService;

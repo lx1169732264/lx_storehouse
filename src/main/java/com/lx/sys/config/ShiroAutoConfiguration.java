@@ -1,7 +1,6 @@
 package com.lx.sys.config;
 
-import com.lx.sys.config.UserRealm;
-import com.lx.sys.config.ShiroLoginFilter;
+
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
@@ -45,6 +44,7 @@ public class ShiroAutoConfiguration {
 
     @Autowired
     private RedisProperties redisProperties;
+
     /**
      * 创建凭证匹配器
      */

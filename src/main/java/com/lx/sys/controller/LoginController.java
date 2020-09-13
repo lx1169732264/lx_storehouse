@@ -14,16 +14,16 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
  * @author lx
  */
-@RestController
+@Controller
 @RequestMapping("login")
 public class LoginController {
 
@@ -33,6 +33,7 @@ public class LoginController {
     private LoginfoService loginfoService;
 
     @PostMapping("doLogin")
+    @ResponseBody
     public ResultObj doLogin(String loginname, String password, HttpServletRequest request) {
         try {
             Subject subject = SecurityUtils.getSubject();
@@ -78,7 +79,7 @@ public class LoginController {
 
         List<MenuTreeNode> treeNodes = new ArrayList<>();
         for (Menu m : menus) {
-            treeNodes.add(new MenuTreeNode(m.getId(), m.getPid(), m.getTitle(), m.getHref(), m.getIcon(), m.getSpread() == 1, m.getTarget(), m.getTypecode()));
+            treeNodes.add(new MenuTreeNode(m.getId(), m.getPid(), m.getTitle(), m.getHref(), m.getIcon(), m.getSpread() == 1, m.getTarget(), m.getTypeCode()));
         }
         List<MenuTreeNode> nodes = MenuTreeNode.MenuTreeNodeBuilder.build(treeNodes, 0);
         Map<String, Object> res = new HashMap<>(4);
@@ -92,6 +93,7 @@ public class LoginController {
      * 验证当前用户是否登录
      */
     @PostMapping("checkLogin")
+    @ResponseBody
     public ResultObj checkLogin() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {

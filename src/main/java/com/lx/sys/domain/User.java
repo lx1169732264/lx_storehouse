@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -12,9 +11,11 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
-@ApiModel(value="com-lx-sys-domain-User")
+/**
+ * @author lx
+ */
+@ApiModel(value = "com-lx-sys-domain-User")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,97 +25,98 @@ public class User implements Serializable {
      * 主键
      */
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value="主键")
+    @ApiModelProperty(value = "主键")
     private Integer id;
+
+    @TableField(exist = false)
+    private String deptname;
 
     /**
      * 姓名
      */
     @TableField(value = "name")
-    @ApiModelProperty(value="姓名")
+    @ApiModelProperty(value = "姓名")
     private String name;
 
     /**
      * 登陆名
      */
     @TableField(value = "loginname")
-    @ApiModelProperty(value="登陆名")
+    @ApiModelProperty(value = "登陆名")
     private String loginname;
 
     /**
      * 地址
      */
     @TableField(value = "address")
-    @ApiModelProperty(value="地址")
+    @ApiModelProperty(value = "地址")
     private String address;
 
     /**
      * 性别
      */
     @TableField(value = "sex")
-    @ApiModelProperty(value="性别")
+    @ApiModelProperty(value = "性别")
     private Integer sex;
 
     /**
      * 备注
      */
     @TableField(value = "remark")
-    @ApiModelProperty(value="备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     /**
      * 密码
      */
     @TableField(value = "pwd")
-    @ApiModelProperty(value="密码")
+    @ApiModelProperty(value = "密码")
     private String pwd;
 
     /**
      * 部门ID
      */
     @TableField(value = "deptid")
-    @ApiModelProperty(value="部门ID")
+    @ApiModelProperty(value = "部门ID")
     private Integer deptid;
 
     /**
      * 入职时间
      */
     @TableField(value = "hiredate")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-    @ApiModelProperty(value="入职时间")
+    @ApiModelProperty(value = "入职时间")
     private Date hiredate;
 
     @TableField(value = "ordernum")
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value = "")
     private Integer ordernum;
 
     /**
      * 用户类型[0超级管理员1普通用户]
      */
     @TableField(value = "type")
-    @ApiModelProperty(value="用户类型[0超级管理员1普通用户]")
+    @ApiModelProperty(value = "用户类型[0超级管理员1普通用户]")
     private Integer type;
 
     /**
      * 头像地址
      */
     @TableField(value = "imgpath")
-    @ApiModelProperty(value="头像地址")
+    @ApiModelProperty(value = "头像地址")
     private String imgpath;
 
     /**
      * 盐
      */
     @TableField(value = "salt")
-    @ApiModelProperty(value="盐")
+    @ApiModelProperty(value = "盐")
     private String salt;
 
     /**
-     *  是否可用
+     * 是否可用
      */
     @TableField(value = "available")
-    @ApiModelProperty(value=" 是否可用")
+    @ApiModelProperty(value = " 是否可用")
     private Integer available;
 
     private static final long serialVersionUID = 1L;

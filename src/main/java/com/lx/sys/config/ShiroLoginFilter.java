@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author: lx
+ * @program: 0812erp
+ * @author: 雷哥
+ * @create: 2020-01-13 17:03
  **/
 
 public class ShiroLoginFilter extends FormAuthenticationFilter {
