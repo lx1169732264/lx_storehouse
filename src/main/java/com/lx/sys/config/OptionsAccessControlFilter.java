@@ -9,11 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @program: 0812erp
- * @author: 雷哥
- * @create: 2020-01-04 18:20
+ * @author lx
  **/
-
 public class OptionsAccessControlFilter extends UserFilter {
 
     @Override

@@ -31,9 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @program: 0812springboot
- * @author: 雷哥
- * @create: 2019-12-18 15:58
+ * @author lx
  **/
 @Configuration
 @EnableConfigurationProperties(ShiroProperties.class)

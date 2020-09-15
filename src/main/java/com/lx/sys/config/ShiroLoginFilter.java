@@ -10,11 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @program: 0812erp
- * @author: 雷哥
- * @create: 2020-01-13 17:03
+ * @author lx
  **/
-
 public class ShiroLoginFilter extends FormAuthenticationFilter {
     /**
      * 当用户访问未登陆资源时，会走的方法。

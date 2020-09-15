@@ -4,13 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author: 雷哥
- * @create: 2020-01-04 17:38
+ * @author lx
  **/
-
 @Data
-@EqualsAndHashCode(callSuper=false)
-public class UserVo extends  BaseVo{
+@EqualsAndHashCode(callSuper = false)
+public class UserVo extends BaseVo {
 
     private String name;
     private String remark;

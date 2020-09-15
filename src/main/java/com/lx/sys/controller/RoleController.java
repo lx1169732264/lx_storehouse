@@ -16,9 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @program: 0812erp
- * @author: 雷哥
- * @create: 2020-01-06 16:24
+ * @author lx
  **/
 @RestController
 @RequestMapping("role")

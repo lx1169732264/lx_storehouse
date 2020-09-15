@@ -12,9 +12,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * @program: 0812erp
- * @author: 雷哥
- * @create: 2020-01-04 10:03
+ * @author lx
  **/
 @Configuration
 public class TokenWebSessionManager   extends DefaultWebSessionManager {
