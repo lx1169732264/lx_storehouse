@@ -50,9 +50,13 @@ public class LoginController {
             loginfo.setLoginip(request.getRemoteAddr());
             loginfo.setLogintime(new Date());
             loginfoService.save(loginfo);
-            return new ResultObj(200, "登陆成功", token);
+            Map<String, Object> map = new HashMap<>(8);
+            map.put("token", token);
+            map.put("permissions", activeUser.getPermissions());
+            map.put("usertype", user.getType());
+            map.put("username", user.getName());
+            return new ResultObj(200, "登陆成功", map);
         } catch (AuthenticationException e) {
-            System.out.println("******************************************************");
             e.printStackTrace();
             return new ResultObj(-1, "用户名或密码不正确");
         }
@@ -72,9 +76,9 @@ public class LoginController {
         User user = activeUser.getUser();
         List<Menu> menus;
         if (user.getType().equals(Constant.USER_TYPE_SUPER)) {
-            menus = menuService.queryAllMenusForList();
+            menus = menuService.queryAllMenuForList();
         } else {
-            menus = menuService.queryAllMenusByUserId(user.getId());
+            menus = menuService.queryMenuForListByUserId(user.getId());
         }
 
         List<MenuTreeNode> treeNodes = new ArrayList<>();
@@ -98,15 +102,7 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             return ResultObj.IS_LOGIN;
-        } else {
-            return ResultObj.UN_LOGIN;
         }
+        return ResultObj.UN_LOGIN;
     }
-
-
-    /**
-     * 验证码
-     */
-
-
 }

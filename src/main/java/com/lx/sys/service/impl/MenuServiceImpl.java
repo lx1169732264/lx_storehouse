@@ -3,6 +3,7 @@ package com.lx.sys.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lx.sys.common.Constant;
 import com.lx.sys.common.DataGridView;
+import com.lx.sys.mapper.RoleMapper;
 import com.lx.sys.vo.MenuVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,39 +23,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Autowired
     private MenuMapper menuMapper;
-//    @Autowired
-//    private
 
-    @Override
-    public List<Menu> queryAllMenusForList() {
-        QueryWrapper<Menu> qw = new QueryWrapper<Menu>();
-        qw.eq("available", Constant.AVAILABLE_TRUE);
-        qw.and(menuQueryWrapper -> menuQueryWrapper.eq("type", Constant.MENU_TYPE_TOP).or().eq("type", Constant.MENU_TYPE_LEFT));
-        qw.orderByAsc("ordernum");
-        return this.menuMapper.selectList(qw);
-    }
-
-    @Override
-    public List<Menu> queryAllMenusByUserId(Integer id) {
-        QueryWrapper<Menu> qw = new QueryWrapper<Menu>();
-        qw.eq("available", Constant.AVAILABLE_TRUE);
-        qw.and(menuQueryWrapper -> menuQueryWrapper.eq("type", Constant.MENU_TYPE_TOP).or().eq("type", Constant.MENU_TYPE_LEFT));
-        qw.orderByAsc("ordernum");
-        return this.menuMapper.selectList(qw);
-    }
-
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Override
     public List<Menu> queryAllMenuForList() {
         QueryWrapper<Menu> qw = new QueryWrapper<>();
         qw.eq("available", Constant.AVAILABLE_TRUE);
-        qw.and(new Consumer<QueryWrapper<Menu>>() {
-            @Override
-            public void accept(QueryWrapper<Menu> menuQueryWrapper) {
-                menuQueryWrapper.eq("type", Constant.MENU_TYPE_TOP)
-                        .or().eq("type", Constant.MENU_TYPE_LEFT);
-            }
-        });
+        qw.and(menuQueryWrapper -> menuQueryWrapper.eq("type", Constant.MENU_TYPE_TOP)
+                .or().eq("type", Constant.MENU_TYPE_LEFT));
         qw.orderByAsc("ordernum");
         return this.menuMapper.selectList(qw);
     }
@@ -62,38 +40,27 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> queryMenuForListByUserId(Integer id) {
-//
-//        //根据userid查询角色id的集合
-//        List<Integer> roleIds=this.roleMapper.queryRoleIdsByUserId(id);
-//
-//        //根据角色ID的集合，查询菜单的ID的集合
-//        if(null!=roleIds&&roleIds.size()>0){
-//            List<Integer> menuIds=this.roleMapper.queryMenuIdsByRids(roleIds);
-//            if(null!=menuIds&&menuIds.size()>0) {
-//                QueryWrapper<Menu> qw = new QueryWrapper<>();
-//                qw.eq("available", Constant.AVAILABLE_TRUE);
-//                qw.and(new Consumer<QueryWrapper<Menu>>() {
-//                    @Override
-//                    public void accept(QueryWrapper<Menu> menuQueryWrapper) {
-//                        menuQueryWrapper.eq("type", Constant.MENU_TYPE_TOP)
-//                                .or().eq("type", Constant.MENU_TYPE_LEFT);
-//                    }
-//                });
-//                qw.in("id",menuIds);
-//                qw.orderByAsc("ordernum");
-//                List<Menu> menus=this.menuMapper.selectList(qw);
-//                return menus;
-//            }else{
-//                return new ArrayList<>();
-//            }
-//        }else{
+        //根据userid查询角色id的集合
+        List<Integer> roleIds = this.roleMapper.queryRoleIdsByUserId(id);
+        //根据角色ID的集合，查询菜单的ID的集合
+        if (null != roleIds && roleIds.size() > 0) {
+            List<Integer> menuIds = this.roleMapper.queryMenuIdsByRids(roleIds);
+            if (null != menuIds && menuIds.size() > 0) {
+                QueryWrapper<Menu> qw = new QueryWrapper<>();
+                qw.eq("available", Constant.AVAILABLE_TRUE);
+                qw.and(menuQueryWrapper -> menuQueryWrapper.eq("type", Constant.MENU_TYPE_TOP)
+                        .or().eq("type", Constant.MENU_TYPE_LEFT));
+                qw.in("id", menuIds);
+                qw.orderByAsc("ordernum");
+                return this.menuMapper.selectList(qw);
+            }
             return new ArrayList<>();
         }
-//    }
+        return new ArrayList<>();
+    }
 
     @Override
     public DataGridView queryAllMenu(MenuVo menuVo) {
-
         QueryWrapper<Menu> qw = new QueryWrapper<>();
         qw.eq(menuVo.getAvailable() != null, "available", menuVo.getAvailable());
         qw.orderByAsc("ordernum");
@@ -125,30 +92,26 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<String> queryPermissionCodesByUserId(Integer id) {
-//        //根据userid查询角色id的集合
-//        List<Integer> roleIds=this.roleMapper.queryRoleIdsByUserId(id);
-//
-//        //根据角色ID的集合，查询菜单的ID的集合
-//        if(null!=roleIds&&roleIds.size()>0){
-//            List<Integer> menuIds=this.roleMapper.queryMenuIdsByRids(roleIds);
-//            if(null!=menuIds&&menuIds.size()>0) {
-//                QueryWrapper<Menu> qw = new QueryWrapper<>();
-//                qw.eq("available", Constant.AVAILABLE_TRUE);
-//                qw.eq("type",Constant.MENU_TYPE_PERMISSION);
-//                qw.in("id",menuIds);
-//                qw.orderByAsc("ordernum");
-//                List<Menu> menus=this.menuMapper.selectList(qw);
-//                List<String> permissions=new ArrayList<>();
-//                for (Menu menu : menus) {
-//                    permissions.add(menu.getTypeCode());
-//                }
-//                return permissions;
-//            }else{
-//                return null;
-//            }
-//        }else{
-            return null;
+        List<String> permissions = new ArrayList<>();
+        //根据userid查询角色id的集合
+        List<Integer> roleIds = this.roleMapper.queryRoleIdsByUserId(id);
+        //根据角色ID的集合，查询菜单的ID的集合
+        if (null != roleIds && roleIds.size() > 0) {
+            List<Integer> menuIds = this.roleMapper.queryMenuIdsByRids(roleIds);
+            if (null != menuIds && menuIds.size() > 0) {
+                QueryWrapper<Menu> qw = new QueryWrapper<>();
+                qw.eq("available", Constant.AVAILABLE_TRUE);
+                qw.eq("type", Constant.MENU_TYPE_PERMISSION);
+                qw.in("id", menuIds);
+                qw.orderByAsc("ordernum");
+                List<Menu> menus = this.menuMapper.selectList(qw);
+                for (Menu menu : menus) {
+                    permissions.add(menu.getTypeCode());
+                }
+            }
+            return permissions;
         }
-//    }
+        return null;
+    }
 }
 

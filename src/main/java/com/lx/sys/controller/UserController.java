@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @program: 0812erp
- * @author: lx
- * @create: 2020-01-06 16:24
+ * @author lx
  **/
 @RestController
 @RequestMapping("user")
@@ -39,7 +37,6 @@ public class UserController {
         return new DataGridView(maxValue + 1);
     }
 
-
     @PostMapping("addUser")
     public ResultObj addUser(User user) {
         try {
@@ -55,7 +52,6 @@ public class UserController {
             return ResultObj.ADD_ERROR;
         }
     }
-
 
     @PostMapping("updateUser")
     public ResultObj updateUser(User user) {

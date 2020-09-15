@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author lx
@@ -71,6 +74,7 @@ public class User implements Serializable {
      */
     @TableField(value = "pwd")
     @ApiModelProperty(value = "密码")
+    @JsonIgnore  //生成json串时不序列化
     private String pwd;
 
     /**
@@ -85,6 +89,8 @@ public class User implements Serializable {
      */
     @TableField(value = "hiredate")
     @ApiModelProperty(value = "入职时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date hiredate;
 
     @TableField(value = "ordernum")
@@ -110,6 +116,7 @@ public class User implements Serializable {
      */
     @TableField(value = "salt")
     @ApiModelProperty(value = "盐")
+    @JsonIgnore  //生成json串时不序列化
     private String salt;
 
     /**

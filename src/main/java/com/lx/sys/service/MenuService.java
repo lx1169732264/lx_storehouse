@@ -7,22 +7,16 @@ import com.lx.sys.vo.MenuVo;
 
 import java.util.List;
 
+/**
+ * @author lx
+ */
 public interface MenuService extends IService<Menu> {
 
 
-    List<Menu> queryAllMenusForList();
-
-    List<Menu> queryAllMenusByUserId(Integer id);
-    /**
-     * 全查询菜单
-     * @return
-     */
     List<Menu> queryAllMenuForList();
 
     /**
      * 根据用户ID查询菜单
-     * @param id
-     * @return
      */
     List<Menu> queryMenuForListByUserId(Integer id);
 
