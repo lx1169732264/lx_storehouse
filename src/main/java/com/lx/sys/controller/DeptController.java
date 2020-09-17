@@ -21,7 +21,6 @@ public class DeptController {
     @Autowired
     private DeptService deptService;
 
-
     @GetMapping("loadAllDept")
     public Object loadAllDept(DeptVo deptVo) {
         return this.deptService.queryAllDept(deptVo);
@@ -37,10 +36,6 @@ public class DeptController {
         return new DataGridView(maxValue + 1);
     }
 
-
-    /**
-     * 添加部门
-     */
     @PostMapping("addDept")
     @RequiresPermissions("dept:add")
     public ResultObj addDept(Dept dept) {
@@ -55,9 +50,6 @@ public class DeptController {
         }
     }
 
-    /**
-     * 修改部门
-     */
     @RequestMapping("updateDept")
     @RequiresPermissions("dept:update")
     public ResultObj updateDept(Dept dept) {
@@ -84,9 +76,7 @@ public class DeptController {
         return new DataGridView(count);
     }
 
-    /**
-     * 删除
-     */
+
     @RequiresPermissions("dept:delete")
     @PostMapping("deleteDept")
     public ResultObj deleteDept(Integer id) {

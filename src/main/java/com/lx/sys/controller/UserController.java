@@ -27,7 +27,6 @@ public class UserController {
         return this.userService.queryAllUser(userVo);
     }
 
-
     /**
      * 查询部门最大的排序码
      */

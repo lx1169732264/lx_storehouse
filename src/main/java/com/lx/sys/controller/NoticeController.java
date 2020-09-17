@@ -26,17 +26,13 @@ public class NoticeController {
     @Autowired
     private NoticeService noticeService;
 
-    /**
-     * 查询
-     */
+
     @GetMapping("loadAllNotice")
     public Object loadAllNotice(NoticeVo noticeVo) {
         return this.noticeService.queryAllNotice(noticeVo);
     }
 
-    /**
-     * 添加
-     */
+
     @PostMapping("addNotice")
     public ResultObj addNotice(Notice notice) {
         try {
@@ -53,9 +49,7 @@ public class NoticeController {
 
     }
 
-    /**
-     * 修改
-     */
+
     @PostMapping("updateNotice")
     public ResultObj updateNotice(Notice notice) {
         try {
@@ -68,9 +62,7 @@ public class NoticeController {
 
     }
 
-    /**
-     * 删除
-     */
+
     @PostMapping("deleteNotice")
     public ResultObj deleteNotice(Integer id) {
         try {
@@ -82,9 +74,7 @@ public class NoticeController {
         }
     }
 
-    /**
-     * 批量删除
-     */
+
     @PostMapping("batchDeleteNotice")
     public ResultObj batchdeleteNotice(Integer[] ids) {
         try {

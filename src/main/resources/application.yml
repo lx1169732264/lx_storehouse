@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 1169
 spring:
   datasource: #数据源配置
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -44,24 +44,30 @@ shiro:
   login-url: /index.html
   unauthorized-url: /unauthorized.html
   anon-urls:
-    - /**
-  #    - /api/login/doLogin*
-  #    - /api/druid/**
-  #    - /api/swagger-ui.html
-  #    - /api/webjars/**
-  #    - /api/swagger-resources/**
-  #    - /api/v2/**
-  #    - /api/login/captcha
-  #    - /api/login/checkLogin
+      - /login/doLogin*
+      - /druid/**
+      - /swagger-ui.html
+      - /webjars/**
+      - /swagger-resources/**
+      - /v2/**
+      - /login/captcha
+      - /login/checkLogin
+#      - /api/login/doLogin*
+#      - /api/druid/**
+#      - /api/swagger-ui.html
+#      - /api/webjars/**
+#      - /api/swagger-resources/**
+#      - /api/v2/**
+#      - /api/login/captcha
+#      - /api/login/checkLogin
   logout-url: /api/login/logout*
   authc-urls:
-#    - /**
+    - /**
 #mybatisplus的配置
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*/*Mapper.xml
-
 
 #fastdfs设置
 fdfs:

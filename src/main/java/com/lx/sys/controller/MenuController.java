@@ -108,9 +108,7 @@ public class MenuController {
     }
 
 
-    /**
-     * 删除
-     */
+
     @RequestMapping("deleteMenu")
     public ResultObj deleteMenu(Integer id){
         try {

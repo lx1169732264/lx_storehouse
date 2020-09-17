@@ -83,9 +83,7 @@ public class RoleController {
     }
 
 
-    /**
-     * 删除
-     */
+
     @RequestMapping("deleteRole")
     public ResultObj deleteRole(Integer id){
         try {

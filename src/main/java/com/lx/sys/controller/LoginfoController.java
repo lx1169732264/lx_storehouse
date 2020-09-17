@@ -26,9 +26,7 @@ public class LoginfoController {
         return this.loginfoService.queryAllLoginfo(loginfoVo);
     }
 
-    /**
-     * 删除
-     */
+
     @PostMapping("deleteLoginfo")
     public ResultObj deleteLoginfo(Integer id) {
         try {
@@ -40,9 +38,7 @@ public class LoginfoController {
         }
     }
 
-    /**
-     * 批量删除
-     */
+
     @PostMapping("batchDeleteLoginfo")
     public ResultObj batchDeleteLoginfo(Integer[] ids) {
         try {
