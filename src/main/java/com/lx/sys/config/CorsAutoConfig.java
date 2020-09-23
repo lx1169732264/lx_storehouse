@@ -6,9 +6,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-/**
- * @author lx
- **/
+
 @Configuration
 public class CorsAutoConfig {
 
@@ -20,8 +18,6 @@ public class CorsAutoConfig {
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedOrigin("*");
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
-
-        CorsFilter corsFilter=new CorsFilter(urlBasedCorsConfigurationSource);
-        return corsFilter;
+        return new CorsFilter(urlBasedCorsConfigurationSource);
     }
 }

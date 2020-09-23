@@ -19,7 +19,7 @@ import java.util.List;
  * @author: lx
  * @create: 2020-01-06 10:43
  **/
-@RequestMapping("notice")
+@RequestMapping("api/notice")
 @RestController
 public class NoticeController {
 

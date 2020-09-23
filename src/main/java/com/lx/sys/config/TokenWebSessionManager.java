@@ -11,17 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * @author lx
- **/
-@Configuration
-public class TokenWebSessionManager   extends DefaultWebSessionManager {
 
-    private static final String TOKEN_HEADER = "TOKEN" ;
+@Configuration
+public class TokenWebSessionManager extends DefaultWebSessionManager {
+
+    private static final String TOKEN_HEADER = "TOKEN";
 
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
         HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
+        System.out.println(httpServletRequest.getRequestURI());
         //从头里面得到请求TOKEN 如果不存在就生成一个
         String header = WebUtils.toHttp(request).getHeader(TOKEN_HEADER);
         if (StringUtils.hasText(header)) {

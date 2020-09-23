@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @author lx
  */
 @RestController
-@RequestMapping("login")
+@RequestMapping("api/login")
 public class LoginController {
 
     @Autowired

@@ -19,7 +19,7 @@ import java.util.List;
  * @author: lx
  **/
 @RestController
-@RequestMapping("menu")
+@RequestMapping("api/menu")
 public class MenuController {
 
 

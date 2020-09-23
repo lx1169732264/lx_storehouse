@@ -21,12 +21,11 @@ import java.util.Map;
  * @author lx
  */
 @RestController
-@RequestMapping("file")
+@RequestMapping("api/file")
 public class FileController {
 
     @Autowired
     private UploadService uploadService;
-
     @Autowired
     private UserService userService;
 
@@ -35,7 +34,6 @@ public class FileController {
      */
     @RequestMapping("uploadFile")
     public Object uploadFile(MultipartFile mf){
-
         String path = this.uploadService.uploadImage(mf);
 
         Map<String,String> map=new HashMap<>();

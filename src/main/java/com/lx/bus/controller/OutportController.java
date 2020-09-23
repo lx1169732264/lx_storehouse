@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author lx
  */
-@RequestMapping("outport")
+@RequestMapping("api/outport")
 @RestController
 public class OutportController {
 

@@ -19,7 +19,7 @@ import java.util.List;
  * @author lx
  **/
 @RestController
-@RequestMapping("role")
+@RequestMapping("api/role")
 public class RoleController {
 
 

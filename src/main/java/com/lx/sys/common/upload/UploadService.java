@@ -29,12 +29,11 @@ public class UploadService {
     private UploadProperties prop;
 
     public String uploadImage(MultipartFile file) {
-        // 1、校验文件类型
+        // 1、校验文件类型/内容
         String contentType = file.getContentType();
         if (!prop.getAllowTypes().contains(contentType)) {
             throw new RuntimeException("文件类型不支持");
         }
-        // 2、校验文件内容
         try {
             BufferedImage image = ImageIO.read(file.getInputStream());
             if (image == null || image.getWidth() == 0 || image.getHeight() == 0) {
@@ -46,14 +45,11 @@ public class UploadService {
         }
 
         try {
-            // 3、上传到FastDFS
-            // 3.1、获取扩展名
             String extension = StringUtils.substringAfterLast(file.getOriginalFilename(), ".");
-            // 3.2、上传
             StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(), extension, null);
-            // 返回路径
             return storePath.getFullPath();
         } catch (IOException e) {
+            e.printStackTrace();
             log.error("【文件上传】上传文件失败！....{}", e);
             throw new RuntimeException("【文件上传】上传文件失败！" + e.getMessage());
         }

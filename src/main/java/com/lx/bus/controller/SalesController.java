@@ -18,7 +18,7 @@ import java.util.Date;
  * @author: 雷哥
  * @create: 2020-01-06 10:43
  **/
-@RequestMapping("sales")
+@RequestMapping("api/sales")
 @RestController
 public class SalesController {
 
@@ -26,23 +26,21 @@ public class SalesController {
     private SalesService salesService;
 
 
-
     @RequestMapping("loadAllSales")
-    public Object loadAllSales(SalesVo salesVo){
+    public Object loadAllSales(SalesVo salesVo) {
         return this.salesService.queryAllSales(salesVo);
     }
 
 
     @RequestMapping("addSales")
-    public ResultObj addSales(Sales sales){
+    public ResultObj addSales(Sales sales) {
         try {
-            ActiveUser activeUser= (ActiveUser) SecurityUtils.getSubject().getPrincipal();
+            ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
             sales.setOperateperson(activeUser.getUser().getName());
             sales.setSalestime(new Date());
             this.salesService.saveSales(sales);
             return ResultObj.ADD_SUCCESS;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
@@ -51,12 +49,11 @@ public class SalesController {
 
 
     @RequestMapping("updateSales")
-    public ResultObj updateSales(Sales sales){
+    public ResultObj updateSales(Sales sales) {
         try {
             this.salesService.updateSales(sales);
             return ResultObj.UPDATE_SUCCESS;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
@@ -65,12 +62,11 @@ public class SalesController {
 
 
     @RequestMapping("deleteSales")
-    public ResultObj deleteSales(Integer id){
+    public ResultObj deleteSales(Integer id) {
         try {
             this.salesService.removeById(id);
             return ResultObj.DELETE_SUCCESS;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }
