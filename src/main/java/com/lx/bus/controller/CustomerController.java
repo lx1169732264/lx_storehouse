@@ -12,25 +12,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author lx
  **/
-@RequestMapping("api/customer")
+@RequestMapping("customer")
+//@RequestMapping("api/customer")
 @RestController
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
 
-
-
     @RequestMapping("loadAllCustomer")
     public Object loadAllCustomer(CustomerVo customerVo) {
         return this.customerService.queryAllCustomer(customerVo);
     }
-
 
     @RequestMapping("addCustomer")
     public ResultObj addCustomer(Customer customer) {
@@ -44,7 +43,6 @@ public class CustomerController {
         }
 
     }
-
 
     @RequestMapping("updateCustomer")
     public ResultObj updateCustomer(Customer customer) {
@@ -74,10 +72,7 @@ public class CustomerController {
     @RequestMapping("batchDeleteCustomer")
     public ResultObj batchdeleteCustomer(Integer[] ids) {
         try {
-            List<Integer> idsList = new ArrayList<>();
-            for (Integer id : ids) {
-                idsList.add(id);
-            }
+            List<Integer> idsList = new ArrayList<>(Arrays.asList(ids));
             this.customerService.removeByIds(idsList);
             return ResultObj.DELETE_SUCCESS;
         } catch (Exception e) {

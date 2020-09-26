@@ -7,10 +7,10 @@ spring:
     username: root
     password: 123456
     druid:
-      max-active: 10
+      max-active: 20
       min-idle: 5
       max-wait: 5000
-      initial-size: 5
+      initial-size: 8
       validation-query: select 1
       stat-view-servlet:
         enabled: true
@@ -44,22 +44,22 @@ shiro:
   login-url: /index.html
   unauthorized-url: /unauthorized.html
   anon-urls:
-#      - /login/doLogin*
-#      - /druid/**
-#      - /swagger-ui.html
-#      - /webjars/**
-#      - /swagger-resources/**
-#      - /v2/**
-#      - /login/captcha
-#      - /login/checkLogin
-      - /api/login/doLogin*
-      - /api/druid/**
-      - /api/swagger-ui.html
-      - /api/webjars/**
-      - /api/swagger-resources/**
-      - /api/v2/**
-      - /api/login/captcha
-      - /api/login/checkLogin
+      - /login/doLogin*
+      - /druid/**
+      - /swagger-ui.html
+      - /webjars/**
+      - /swagger-resources/**
+      - /v2/**
+      - /login/captcha
+      - /login/checkLogin
+#      - /api/login/doLogin*
+#      - /api/druid/**
+#      - /api/swagger-ui.html
+#      - /api/webjars/**
+#      - /api/swagger-resources/**
+#      - /api/v2/**
+#      - /api/login/captcha
+#      - /api/login/checkLogin
   logout-url: /api/login/logout*
   authc-urls:
     - /**

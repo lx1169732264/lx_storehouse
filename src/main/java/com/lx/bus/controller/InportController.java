@@ -16,7 +16,8 @@ import java.util.Date;
 /**
  * @author lx
  */
-@RequestMapping("api/inport")
+@RequestMapping("inport")
+//@RequestMapping("api/inport")
 @RestController
 public class InportController {
 
@@ -24,20 +25,19 @@ public class InportController {
     private InportService inportService;
 
     @RequestMapping("loadAllInport")
-    public Object loadAllInport(InportVo inportVo){
+    public Object loadAllInport(InportVo inportVo) {
         return this.inportService.queryAllInport(inportVo);
     }
 
     @RequestMapping("addInport")
-    public ResultObj addInport(Inport inport){
+    public ResultObj addInport(Inport inport) {
         try {
-            ActiveUser activeUser= (ActiveUser) SecurityUtils.getSubject().getPrincipal();
+            ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
             inport.setOperateperson(activeUser.getUser().getName());
             inport.setInporttime(new Date());
             this.inportService.saveInport(inport);
             return ResultObj.ADD_SUCCESS;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
@@ -45,12 +45,11 @@ public class InportController {
     }
 
     @RequestMapping("updateInport")
-    public ResultObj updateInport(Inport inport){
+    public ResultObj updateInport(Inport inport) {
         try {
             this.inportService.updateInport(inport);
             return ResultObj.UPDATE_SUCCESS;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
@@ -58,12 +57,11 @@ public class InportController {
     }
 
     @RequestMapping("deleteInport")
-    public ResultObj deleteInport(Integer id){
+    public ResultObj deleteInport(Integer id) {
         try {
             this.inportService.removeById(id);
             return ResultObj.DELETE_SUCCESS;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }

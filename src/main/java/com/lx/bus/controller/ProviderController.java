@@ -18,7 +18,8 @@ import java.util.List;
 /**
  * @author lx
  */
-@RequestMapping("api/provider")
+@RequestMapping("provider")
+//@RequestMapping("api/provider")
 @RestController
 public class ProviderController {
 

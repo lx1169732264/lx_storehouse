@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,15 +36,11 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
     public DataGridView queryAllInport(InportVo inportVo) {
 
         IPage<Inport> page=new Page<>(inportVo.getPage(),inportVo.getLimit());
-
         QueryWrapper<Inport> qw=new QueryWrapper<>();
-
         qw.eq(inportVo.getGoodsid()!=null,"goodsid",inportVo.getGoodsid());
         qw.eq(inportVo.getProviderid()!=null,"providerid",inportVo.getProviderid());
-
         qw.ge(inportVo.getStartTime()!=null,"inporttime",inportVo.getStartTime());
         qw.le(inportVo.getEndTime()!=null,"inporttime",inportVo.getEndTime());
-
         qw.orderByDesc("inporttime");
 
         this.inportMapper.selectPage(page,qw);
@@ -60,6 +57,11 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
             }
         }
         return new DataGridView(page.getTotal(),records);
+    }
+
+    @Override
+    public Integer queryInportSum(int id, Date starttime, Date endtime) {
+        return inportMapper.queryInportSum(id,starttime,endtime);
     }
 
     @Override

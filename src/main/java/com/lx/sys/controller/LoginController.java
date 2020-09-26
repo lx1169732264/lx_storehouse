@@ -31,7 +31,8 @@ import java.util.concurrent.TimeUnit;
  * @author lx
  */
 @RestController
-@RequestMapping("api/login")
+@RequestMapping("login")
+//@RequestMapping("api/login")
 public class LoginController {
 
     @Autowired
@@ -95,7 +96,6 @@ public class LoginController {
         } else {
             menus = menuService.queryMenuForListByUserId(user.getId());
         }
-
         List<MenuTreeNode> treeNodes = new ArrayList<>();
         for (Menu m : menus) {
             treeNodes.add(new MenuTreeNode(m.getId(), m.getPid(), m.getTitle(), m.getHref(), m.getIcon(), m.getSpread() == 1, m.getTarget(), m.getTypeCode()));

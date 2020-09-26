@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,7 +27,6 @@ public class LoginfoController {
         return this.loginfoService.queryAllLoginfo(loginfoVo);
     }
 
-
     @PostMapping("deleteLoginfo")
     public ResultObj deleteLoginfo(Integer id) {
         try {
@@ -38,15 +38,11 @@ public class LoginfoController {
         }
     }
 
-
     @PostMapping("batchDeleteLoginfo")
     public ResultObj batchDeleteLoginfo(Integer[] ids) {
         try {
             if (null != ids && ids.length > 0) {
-                List<Integer> idsList = new ArrayList<>();
-                for (Integer id : ids) {
-                    idsList.add(id);
-                }
+                List<Integer> idsList = new ArrayList<>(Arrays.asList(ids));
                 this.loginfoService.removeByIds(idsList);
                 return ResultObj.DELETE_SUCCESS;
             } else {

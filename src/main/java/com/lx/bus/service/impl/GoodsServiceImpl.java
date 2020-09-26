@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -91,6 +92,16 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         qw.eq("providerid",providerid);
         List<Goods> goods = this.goodsMapper.selectList(qw);
         return new DataGridView(goods);
+    }
+
+    @Override
+    public Integer queryOutportSum(int id, Date starttime, Date endtime) {
+        return goodsMapper.queryOutportSum(id,starttime,endtime);
+    }
+
+    @Override
+    public Integer querySaleSum(int id, Date starttime, Date endtime) {
+        return goodsMapper.querySaleSum(id,starttime,endtime);
     }
 
     @Cacheable(cacheNames = "com.lx.bus.service.impl.GoodsServiceImpl",key = "#id")

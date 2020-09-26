@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lx.bus.domain.Goods;
 import com.lx.bus.vo.GoodsVo;
 import com.lx.sys.common.DataGridView;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 
 
 public interface GoodsService extends IService<Goods>{
@@ -18,4 +21,8 @@ public interface GoodsService extends IService<Goods>{
     DataGridView getAllAvailableGoods();
 
     DataGridView getGoodsByProviderId(Integer providerid);
+
+    Integer queryOutportSum(@Param("id") int id, @Param("starttime") Date starttime, @Param("endtime") Date endtime);
+
+    Integer querySaleSum(@Param("id") int id, @Param("starttime") Date starttime, @Param("endtime") Date endtime);
 }

@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 /**
- * @program: 0812erp
- * @author: 雷哥
- * @create: 2020-01-06 10:43
+ * @author lx
  **/
 @RequestMapping("api/sales")
 @RestController
@@ -25,12 +23,10 @@ public class SalesController {
     @Autowired
     private SalesService salesService;
 
-
     @RequestMapping("loadAllSales")
     public Object loadAllSales(SalesVo salesVo) {
         return this.salesService.queryAllSales(salesVo);
     }
-
 
     @RequestMapping("addSales")
     public ResultObj addSales(Sales sales) {

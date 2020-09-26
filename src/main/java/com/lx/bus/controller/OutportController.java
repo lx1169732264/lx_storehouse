@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author lx
  */
-@RequestMapping("api/outport")
+@RequestMapping("outport")
+//@RequestMapping("api/outport")
 @RestController
 public class OutportController {
 
     @Autowired
     private OutportService outportService;
-
 
     @RequestMapping("loadAllOutport")
     public Object loadAllOutport(OutportVo outportVo) {
@@ -33,6 +33,5 @@ public class OutportController {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
-
     }
 }
