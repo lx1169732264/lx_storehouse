@@ -35,8 +35,7 @@ public class FileController {
     @RequestMapping("uploadFile")
     public Object uploadFile(MultipartFile mf){
         String path = this.uploadService.uploadImage(mf);
-
-        Map<String,String> map=new HashMap<>();
+        Map<String,String> map=new HashMap<>(4);
         map.put("src",path);
         //更新数据库
         ActiveUser activeUser= (ActiveUser) SecurityUtils.getSubject().getPrincipal();
@@ -52,9 +51,8 @@ public class FileController {
      */
     @RequestMapping("uploadGoodsFile")
     public Object uploadGoodsFile(MultipartFile mf){
-
         String path = this.uploadService.uploadImage(mf);
-        Map<String,String> map=new HashMap<>();
+        Map<String,String> map=new HashMap<>(4);
         map.put("src",path);
         return new DataGridView(map);
     }

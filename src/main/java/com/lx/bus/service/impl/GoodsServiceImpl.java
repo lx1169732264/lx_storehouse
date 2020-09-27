@@ -31,7 +31,6 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Autowired
     private GoodsMapper goodsMapper;
-
     @Autowired
     private ProviderService providerService;
 
@@ -67,7 +66,6 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @CachePut(cacheNames = "com.lx.bus.service.impl.GoodsServiceImpl",key = "#result.id")
     @Override
     public Goods updateGoods(Goods goods) {
-
         Goods selectById = this.goodsMapper.selectById(goods.getId());
         BeanUtil.copyProperties(goods,selectById, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         this.goodsMapper.updateById(selectById);
@@ -102,6 +100,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Override
     public Integer querySaleSum(int id, Date starttime, Date endtime) {
         return goodsMapper.querySaleSum(id,starttime,endtime);
+    }
+
+    @Override
+    public Integer queryLossSum(int id, Date starttime, Date endtime) {
+        return goodsMapper.queryLossSum(id,starttime,endtime);
     }
 
     @Cacheable(cacheNames = "com.lx.bus.service.impl.GoodsServiceImpl",key = "#id")

@@ -1,10 +1,13 @@
 package com.lx.bus.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lx.bus.domain.Goods;
+import com.lx.bus.domain.Loss;
 import com.lx.bus.service.GoodsService;
 import com.lx.bus.service.InportService;
-import com.lx.bus.service.OutportService;
+import com.lx.bus.service.LossService;
+import com.lx.bus.service.ProviderService;
 import com.lx.bus.vo.GoodsVo;
 import com.lx.bus.vo.SeriesVo;
 import com.lx.sys.common.Constant;
@@ -12,6 +15,7 @@ import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.ResultObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,8 +34,12 @@ public class GoodsController {
     private GoodsService goodsService;
     @Autowired
     private InportService inportService;
+    @Autowired
+    private LossService lossService;
+    @Autowired
+    private ProviderService providerService;
 
-    @RequestMapping("loadAllGoods")
+    @GetMapping("loadAllGoods")
     public Object loadAllGoods(GoodsVo goodsVo) {
         return this.goodsService.queryAllGoods(goodsVo);
     }
@@ -46,7 +54,6 @@ public class GoodsController {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
-
     }
 
     @RequestMapping("updateGoods")
@@ -58,7 +65,6 @@ public class GoodsController {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
-
     }
 
     @RequestMapping("deleteGoods")
@@ -119,6 +125,7 @@ public class GoodsController {
         List<Integer> inportList = new ArrayList<>();
         List<Integer> outportList = new ArrayList<>();
         List<Integer> saleList = new ArrayList<>();
+        List<Integer> lossList = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
             Date starttime = new Date(year - 1900, i, 1);
             Date endtime = new Date(year - 1900, i + 1, 1);
@@ -130,13 +137,41 @@ public class GoodsController {
 
             Integer sale = goodsService.querySaleSum(ids[0], starttime, endtime);
             saleList.add(null == sale ? 0 : sale);
+
+            Integer loss = goodsService.queryLossSum(ids[0], starttime, endtime);
+            lossList.add(null == loss ? 0 : loss);
         }
 
         List<SeriesVo> seriesList = new ArrayList<>();
         seriesList.add(new SeriesVo("入货", "line", inportList));
         seriesList.add(new SeriesVo("退货", "line", outportList));
         seriesList.add(new SeriesVo("出货", "line", saleList));
+        seriesList.add(new SeriesVo("损耗", "line", lossList));
         res.put("series", seriesList);
         return res;
+    }
+
+    /**
+     * 根据商品id插入库存损耗
+     */
+    @PostMapping("lossGoods")
+    public Object lossGoods(Loss loss) {
+        QueryWrapper<Loss> qw = new QueryWrapper<>();
+        qw.eq(loss.getLosstime() != null, "losstime", loss.getLosstime());
+        qw.eq(loss.getId() != null, "id", loss.getId());
+        if (null != lossService.getOne(qw)) {
+            return new ResultObj(-2, "请勿重复记录");
+        }
+
+        try {
+            Goods good = goodsService.getById(loss.getId());
+            loss.setProviderid(good.getProviderid());
+            loss.setAvaliable(Constant.AVAILABLE_TRUE);
+            lossService.save(loss);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.ADD_ERROR;
+        }
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +47,6 @@ public class NoticeController {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
-
     }
 
 
@@ -59,7 +59,6 @@ public class NoticeController {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
-
     }
 
 
@@ -78,10 +77,7 @@ public class NoticeController {
     @PostMapping("batchDeleteNotice")
     public ResultObj batchdeleteNotice(Integer[] ids) {
         try {
-            List<Integer> idsList = new ArrayList<>();
-            for (Integer id : ids) {
-                idsList.add(id);
-            }
+            List<Integer> idsList = new ArrayList<>(Arrays.asList(ids));
             this.noticeService.removeByIds(idsList);
             return ResultObj.DELETE_SUCCESS;
         } catch (Exception e) {
