@@ -1,6 +1,8 @@
 package com.lx.bus.controller;
 
+import com.lx.bus.domain.Goods;
 import com.lx.bus.domain.Inport;
+import com.lx.bus.service.GoodsService;
 import com.lx.bus.service.InportService;
 import com.lx.bus.vo.InportVo;
 import com.lx.sys.common.ActiveUser;
@@ -41,7 +43,6 @@ public class InportController {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
-
     }
 
     @RequestMapping("updateInport")
@@ -53,7 +54,6 @@ public class InportController {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
-
     }
 
     @RequestMapping("deleteInport")

@@ -9,9 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-
-public interface GoodsService extends IService<Goods>{
-
+public interface GoodsService extends IService<Goods> {
 
     DataGridView queryAllGoods(GoodsVo goodsVo);
 

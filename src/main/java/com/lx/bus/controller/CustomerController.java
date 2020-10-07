@@ -41,7 +41,6 @@ public class CustomerController {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
-
     }
 
     @RequestMapping("updateCustomer")
@@ -53,7 +52,6 @@ public class CustomerController {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
-
     }
 
 
@@ -88,6 +86,5 @@ public class CustomerController {
     public Object getAllAvailableCustomer() {
         return this.customerService.getAllAvailableCustomer();
     }
-
 
 }

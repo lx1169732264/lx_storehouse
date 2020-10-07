@@ -22,4 +22,13 @@
   </sql>
 
 
+  <select id="queryOutPortSumByInportId" resultType="java.lang.Integer">
+    SELECT
+    sum( number )
+    FROM
+    bus_outport
+    WHERE
+    1 = 1
+    AND inportid =#{inportid}
+  </select>
 </mapper>

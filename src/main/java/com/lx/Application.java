@@ -10,8 +10,6 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 
 @SpringBootApplication
 @MapperScan("com.lx.*.mapper")
-//@EnableAspectJAutoProxy
-//开启redis缓存
 @EnableCaching
 @EnableRedisRepositories
 public class Application {

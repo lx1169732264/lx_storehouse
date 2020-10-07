@@ -16,7 +16,8 @@ import java.util.Date;
 /**
  * @author lx
  **/
-@RequestMapping("api/sales")
+@RequestMapping("sales")
+//@RequestMapping("api/sales")
 @RestController
 public class SalesController {
 
@@ -40,9 +41,7 @@ public class SalesController {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
-
     }
-
 
     @RequestMapping("updateSales")
     public ResultObj updateSales(Sales sales) {
@@ -53,9 +52,7 @@ public class SalesController {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
-
     }
-
 
     @RequestMapping("deleteSales")
     public ResultObj deleteSales(Integer id) {

@@ -7,8 +7,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface SalesbackService extends IService<Salesback>{
 
-
     Salesback saveSalesback(Salesback salesback);
 
     DataGridView queryAllSalesback(SalesbackVo salesbackVo);
+
+    Integer querySalesbackSumBySalesId(int salesid);
 }

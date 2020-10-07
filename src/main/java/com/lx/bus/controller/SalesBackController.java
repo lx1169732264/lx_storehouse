@@ -1,7 +1,9 @@
 package com.lx.bus.controller;
 
-
+import com.lx.bus.domain.Goods;
 import com.lx.bus.domain.Salesback;
+import com.lx.bus.service.GoodsService;
+import com.lx.bus.service.SalesService;
 import com.lx.bus.service.SalesbackService;
 import com.lx.bus.vo.SalesbackVo;
 import com.lx.sys.common.ResultObj;
@@ -11,19 +13,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 /**
  * @author lx
  */
-@RequestMapping("api/salesback")
+@RequestMapping("salesback")
+//@RequestMapping("api/salesback")
 @RestController
 public class SalesBackController {
 
     @Autowired
     private SalesbackService salesbackService;
+    @Autowired
+    private SalesService salesService;
+    @Autowired
+    private GoodsService goodsService;
 
     @GetMapping("loadAllSalesback")
-    public Object loadAllSalesback(SalesbackVo salesbackVo){
+    public Object loadAllSalesback(SalesbackVo salesbackVo) {
         return this.salesbackService.queryAllSalesback(salesbackVo);
     }
 
@@ -31,15 +37,22 @@ public class SalesBackController {
      * 添加退货信息
      */
     @PostMapping("addSalesback")
-    public ResultObj addSalesback(Salesback salesback){
+    public ResultObj addSalesback(Salesback salesback) {
         try {
+            Integer sum = salesbackService.querySalesbackSumBySalesId(salesback.getSalesid());
+            if (null != sum && sum > salesService.getById(salesback.getSalesid()).getNumber()) {
+                return new ResultObj(-1, "退货失败!历史退货总数:" + sum + ",本次退货将超过销售数量!");
+            }
+
             this.salesbackService.saveSalesback(salesback);
+            Goods goods = goodsService.getById(salesback.getGoodsid());
+            if (goods.getNumber() < goods.getDangernum()) {
+                return new ResultObj(-1, "退货成功!当前库存:" + goods.getNumber() + ", 库存预警:" + goods.getDangernum() + ",请及时补货!");
+            }
             return ResultObj.ADD_SUCCESS;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
-
     }
 }
