@@ -13,6 +13,7 @@ import com.lx.bus.vo.SeriesVo;
 import com.lx.sys.common.Constant;
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.ResultObj;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +26,8 @@ import java.util.*;
 /**
  * @author lx
  */
-@RequestMapping("goods")
-//@RequestMapping("api/goods")
+//@RequestMapping("goods")
+@RequestMapping("api/goods")
 @RestController
 public class GoodsController {
 
@@ -44,7 +45,8 @@ public class GoodsController {
         return this.goodsService.queryAllGoods(goodsVo);
     }
 
-    @RequestMapping("addGoods")
+    @PostMapping("addGoods")
+    @RequiresPermissions("goods:add")
     public ResultObj addGoods(Goods goods) {
         try {
             goods.setAvailable(Constant.AVAILABLE_TRUE);
@@ -56,7 +58,8 @@ public class GoodsController {
         }
     }
 
-    @RequestMapping("updateGoods")
+    @PostMapping("updateGoods")
+    @RequiresPermissions("goods:update")
     public ResultObj updateGoods(Goods goods) {
         try {
             this.goodsService.updateGoods(goods);
@@ -67,22 +70,11 @@ public class GoodsController {
         }
     }
 
-    @RequestMapping("deleteGoods")
+    @PostMapping("deleteGoods")
+    @RequiresPermissions("goods:delete")
     public ResultObj deleteGoods(Integer id) {
         try {
             this.goodsService.removeById(id);
-            return ResultObj.DELETE_SUCCESS;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultObj.DELETE_ERROR;
-        }
-    }
-
-    @RequestMapping("batchDeleteGoods")
-    public ResultObj batchDeleteGoods(Integer[] ids) {
-        try {
-            List<Integer> idsList = new ArrayList<>(Arrays.asList(ids));
-            this.goodsService.removeByIds(idsList);
             return ResultObj.DELETE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,26 +111,25 @@ public class GoodsController {
      * 根据商品ID查询统计信息
      */
     @GetMapping("statisticsGoods")
+    @RequiresPermissions("goods:statistics")
     public Map<String, Object> statisticsGoods(Integer[] ids, Integer year) {
-        Map<String, Object> res = new HashMap<>(8);
-
         List<Integer> inportList = new ArrayList<>();
         List<Integer> outportList = new ArrayList<>();
         List<Integer> saleList = new ArrayList<>();
         List<Integer> lossList = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            Date starttime = new Date(year - 1900, i, 1);
-            Date endtime = new Date(year - 1900, i + 1, 1);
-            Integer in = inportService.queryInportSum(ids[0], starttime, endtime);
+            Date startTime = new Date(year - 1900, i, 1);
+            Date endTime = new Date(year - 1900, i + 1, 1);
+            Integer in = inportService.queryInportSum(ids[0], startTime, endTime);
             inportList.add(null == in ? 0 : in);
 
-            Integer out = goodsService.queryOutportSum(ids[0], starttime, endtime);
+            Integer out = goodsService.queryOutportSum(ids[0], startTime, endTime);
             outportList.add(null == out ? 0 : out);
 
-            Integer sale = goodsService.querySaleSum(ids[0], starttime, endtime);
+            Integer sale = goodsService.querySaleSum(ids[0], startTime, endTime);
             saleList.add(null == sale ? 0 : sale);
 
-            Integer loss = goodsService.queryLossSum(ids[0], starttime, endtime);
+            Integer loss = goodsService.queryLossSum(ids[0], startTime, endTime);
             lossList.add(null == loss ? 0 : loss);
         }
 
@@ -147,6 +138,7 @@ public class GoodsController {
         seriesList.add(new SeriesVo("退货", "line", outportList));
         seriesList.add(new SeriesVo("出货", "line", saleList));
         seriesList.add(new SeriesVo("损耗", "line", lossList));
+        Map<String, Object> res = new HashMap<>(8);
         res.put("series", seriesList);
         return res;
     }
@@ -155,6 +147,7 @@ public class GoodsController {
      * 根据商品id插入库存损耗
      */
     @PostMapping("lossGoods")
+    @RequiresPermissions("goods:loss")
     public Object lossGoods(Loss loss) {
         QueryWrapper<Loss> qw = new QueryWrapper<>();
         qw.eq(loss.getLosstime() != null, "losstime", loss.getLosstime());

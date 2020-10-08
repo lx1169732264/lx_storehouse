@@ -9,12 +9,16 @@ import com.lx.sys.service.DeptService;
 import com.lx.sys.vo.DeptVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author: lx
  **/
 @RestController
+//@RequestMapping("dept")
 @RequestMapping("api/dept")
 public class DeptController {
 
@@ -25,7 +29,6 @@ public class DeptController {
     public Object loadAllDept(DeptVo deptVo) {
         return this.deptService.queryAllDept(deptVo);
     }
-
 
     /**
      * 查询部门最大的排序码
@@ -50,7 +53,7 @@ public class DeptController {
         }
     }
 
-    @RequestMapping("updateDept")
+    @PostMapping("updateDept")
     @RequiresPermissions("dept:update")
     public ResultObj updateDept(Dept dept) {
         try {

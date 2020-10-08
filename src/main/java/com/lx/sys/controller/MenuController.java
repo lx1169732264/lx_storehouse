@@ -1,6 +1,5 @@
 package com.lx.sys.controller;
 
-
 import com.lx.sys.common.Constant;
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.ResultObj;
@@ -19,61 +18,58 @@ import java.util.List;
  * @author: lx
  **/
 @RestController
+//@RequestMapping("menu")
 @RequestMapping("api/menu")
 public class MenuController {
-
 
     @Autowired
     private MenuService menuService;
 
-
     /**
      * 查询菜单和权限
+     *
      * @param menuVo
      * @return
      */
-    @RequestMapping("loadAllMenu")
-    public Object loadAllMenu(MenuVo menuVo){
+    @GetMapping("loadAllMenu")
+    public Object loadAllMenu(MenuVo menuVo) {
         return this.menuService.queryAllMenu(menuVo);
     }
 
     /**
-     * 查询菜单
+     * 只查询菜单
+     *
      * @param menuVo
      * @return
      */
-    @RequestMapping("loadMenu")
-    public Object loadMenu(MenuVo menuVo){
+    @GetMapping("loadMenu")
+    public Object loadMenu(MenuVo menuVo) {
         List<Menu> menus = this.menuService.queryAllMenuForList();
-        return new DataGridView(Long.valueOf(menus.size()),menus);
+        return new DataGridView(Long.valueOf(menus.size()), menus);
     }
-
 
     /**
      * 查询菜单和权限最大的排序码
      */
-
     @GetMapping("queryMenuMaxOrderNum")
-    public Object queryMenuMaxOrderNum(){
-        Integer maxValue=this.menuService.queryMenuMaxOrderNum();
-        return new DataGridView(maxValue+1);
+    public Object queryMenuMaxOrderNum() {
+        return new DataGridView(this.menuService.queryMenuMaxOrderNum() + 1);
     }
-
 
     /**
      * 添加菜单和权限
      */
     @PostMapping("addMenu")
-    public ResultObj addMenu(Menu menu){
+    public ResultObj addMenu(Menu menu) {
         try {
-            if(menu.getType().equals("topmenu")){
+            if ("topmenu".equals(menu.getType())) {
                 menu.setPid(0);
             }
             menu.setSpread(Constant.SPREAD_FALSE);
             menu.setAvailable(Constant.AVAILABLE_TRUE);
             this.menuService.saveMenu(menu);
             return ResultObj.ADD_SUCCESS;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
@@ -83,41 +79,38 @@ public class MenuController {
      * 修改菜单和权限
      */
     @PostMapping("updateMenu")
-    public ResultObj updateMenu(Menu menu){
+    public ResultObj updateMenu(Menu menu) {
         try {
             this.menuService.updateMenu(menu);
             return ResultObj.UPDATE_SUCCESS;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
     }
+
     @GetMapping("getMenuById")
-    public Object getMenuById(Integer id){
+    public Object getMenuById(Integer id) {
         return new DataGridView(this.menuService.getById(id));
     }
-
 
     /**
      * 根据ID查询当前菜单和权限的子菜单和权限的个数
      */
     @GetMapping("getMenuChildrenCountById")
-    public Object getMenuChildrenCountById(Integer id){
-        Integer count=this.menuService.queryMenuChildrenCountById(id);
+    public Object getMenuChildrenCountById(Integer id) {
+        Integer count = this.menuService.queryMenuChildrenCountById(id);
         return new DataGridView(count);
     }
 
-
-
-    @RequestMapping("deleteMenu")
-    public ResultObj deleteMenu(Integer id){
+    @PostMapping("deleteMenu")
+    public ResultObj deleteMenu(Integer id) {
         try {
             this.menuService.removeById(id);
             return ResultObj.DELETE_SUCCESS;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.lx.sys.controller;
 
-
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.ResultObj;
 import com.lx.sys.service.LoginfoService;
@@ -16,6 +15,7 @@ import java.util.List;
  * @author: lx
  **/
 @RestController
+//@RequestMapping("loginfo")
 @RequestMapping("api/loginfo")
 public class LoginfoController {
 

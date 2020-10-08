@@ -1,25 +1,25 @@
 package com.lx.bus.controller;
 
-
 import com.lx.bus.domain.Provider;
 import com.lx.bus.service.ProviderService;
 import com.lx.bus.vo.ProviderVo;
 import com.lx.sys.common.Constant;
 import com.lx.sys.common.ResultObj;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 
 /**
  * @author lx
  */
-@RequestMapping("provider")
-//@RequestMapping("api/provider")
+//@RequestMapping("provider")
+@RequestMapping("api/provider")
 @RestController
 public class ProviderController {
 
@@ -31,8 +31,8 @@ public class ProviderController {
         return this.providerService.queryAllProvider(providerVo);
     }
 
-
     @RequestMapping("addProvider")
+    @RequiresPermissions("provider:add")
     public ResultObj addProvider(Provider provider) {
         try {
             provider.setAvailable(Constant.AVAILABLE_TRUE);
@@ -42,10 +42,10 @@ public class ProviderController {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
         }
-
     }
 
     @RequestMapping("updateProvider")
+    @RequiresPermissions("provider:update")
     public ResultObj updateProvider(Provider provider) {
         try {
             this.providerService.updateProvider(provider);
@@ -54,10 +54,10 @@ public class ProviderController {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
-
     }
 
     @RequestMapping("deleteProvider")
+    @RequiresPermissions("provider:delete")
     public ResultObj deleteProvider(Integer id) {
         try {
             this.providerService.removeById(id);
@@ -69,12 +69,10 @@ public class ProviderController {
     }
 
     @RequestMapping("batchDeleteProvider")
+    @RequiresPermissions("provider:delete")
     public ResultObj batchdeleteProvider(Integer[] ids) {
         try {
-            List<Integer> idsList = new ArrayList<>();
-            for (Integer id : ids) {
-                idsList.add(id);
-            }
+            List<Integer> idsList = new ArrayList<>(Arrays.asList(ids));
             this.providerService.removeByIds(idsList);
             return ResultObj.DELETE_SUCCESS;
         } catch (Exception e) {
@@ -82,7 +80,6 @@ public class ProviderController {
             return ResultObj.DELETE_ERROR;
         }
     }
-
 
     /**
      * 查询所有可用的供应商，不分页

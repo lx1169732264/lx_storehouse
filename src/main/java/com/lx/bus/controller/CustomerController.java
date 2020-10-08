@@ -1,11 +1,11 @@
 package com.lx.bus.controller;
 
-
 import com.lx.bus.domain.Customer;
 import com.lx.bus.service.CustomerService;
 import com.lx.bus.vo.CustomerVo;
 import com.lx.sys.common.Constant;
 import com.lx.sys.common.ResultObj;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +18,8 @@ import java.util.List;
 /**
  * @author lx
  **/
-@RequestMapping("customer")
-//@RequestMapping("api/customer")
+//@RequestMapping("customer")
+@RequestMapping("api/customer")
 @RestController
 public class CustomerController {
 
@@ -32,6 +32,7 @@ public class CustomerController {
     }
 
     @RequestMapping("addCustomer")
+    @RequiresPermissions("customer:add")
     public ResultObj addCustomer(Customer customer) {
         try {
             customer.setAvailable(Constant.AVAILABLE_TRUE);
@@ -44,6 +45,7 @@ public class CustomerController {
     }
 
     @RequestMapping("updateCustomer")
+    @RequiresPermissions("customer:update")
     public ResultObj updateCustomer(Customer customer) {
         try {
             this.customerService.updateCustomer(customer);
@@ -54,8 +56,8 @@ public class CustomerController {
         }
     }
 
-
     @RequestMapping("deleteCustomer")
+    @RequiresPermissions("customer:delete")
     public ResultObj deleteCustomer(Integer id) {
         try {
             this.customerService.removeById(id);
@@ -68,6 +70,7 @@ public class CustomerController {
 
 
     @RequestMapping("batchDeleteCustomer")
+    @RequiresPermissions("customer:delete")
     public ResultObj batchdeleteCustomer(Integer[] ids) {
         try {
             List<Integer> idsList = new ArrayList<>(Arrays.asList(ids));
@@ -86,5 +89,4 @@ public class CustomerController {
     public Object getAllAvailableCustomer() {
         return this.customerService.getAllAvailableCustomer();
     }
-
 }

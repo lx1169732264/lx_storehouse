@@ -19,18 +19,13 @@ import java.util.List;
  * @author lx
  **/
 @RestController
+//@RequestMapping("role")
 @RequestMapping("api/role")
 public class RoleController {
 
     @Autowired
     private RoleService roleService;
 
-    /**
-     * 查询角色
-     *
-     * @param roleVo
-     * @return
-     */
     @RequestMapping("loadAllRole")
     public Object loadAllRole(RoleVo roleVo) {
         return this.roleService.queryAllRole(roleVo);

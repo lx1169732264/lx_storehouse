@@ -7,6 +7,7 @@ import com.lx.bus.vo.SalesVo;
 import com.lx.sys.common.ActiveUser;
 import com.lx.sys.common.ResultObj;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +17,8 @@ import java.util.Date;
 /**
  * @author lx
  **/
-@RequestMapping("sales")
-//@RequestMapping("api/sales")
+//@RequestMapping("sales")
+@RequestMapping("api/sales")
 @RestController
 public class SalesController {
 
@@ -30,6 +31,7 @@ public class SalesController {
     }
 
     @RequestMapping("addSales")
+    @RequiresPermissions("sales:add")
     public ResultObj addSales(Sales sales) {
         try {
             ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
@@ -44,6 +46,7 @@ public class SalesController {
     }
 
     @RequestMapping("updateSales")
+    @RequiresPermissions("sales:update")
     public ResultObj updateSales(Sales sales) {
         try {
             this.salesService.updateSales(sales);
@@ -55,6 +58,7 @@ public class SalesController {
     }
 
     @RequestMapping("deleteSales")
+    @RequiresPermissions("sales:delete")
     public ResultObj deleteSales(Integer id) {
         try {
             this.salesService.removeById(id);

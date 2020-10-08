@@ -1,13 +1,13 @@
 package com.lx.bus.controller;
 
 import com.lx.bus.domain.Goods;
-import com.lx.bus.domain.Inport;
 import com.lx.bus.domain.Outport;
 import com.lx.bus.service.GoodsService;
 import com.lx.bus.service.InportService;
 import com.lx.bus.service.OutportService;
 import com.lx.bus.vo.OutportVo;
 import com.lx.sys.common.ResultObj;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author lx
  */
-@RequestMapping("outport")
-//@RequestMapping("api/outport")
+//@RequestMapping("outport")
+@RequestMapping("api/outport")
 @RestController
 public class OutportController {
 
@@ -33,6 +33,7 @@ public class OutportController {
     }
 
     @RequestMapping("addOutport")
+    @RequiresPermissions("inport:outport")
     public ResultObj addOutport(Outport outport) {
         try {
             Integer sum = outportService.queryOutPortSumByInportId(outport.getInportid());

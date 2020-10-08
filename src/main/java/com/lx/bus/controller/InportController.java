@@ -1,13 +1,12 @@
 package com.lx.bus.controller;
 
-import com.lx.bus.domain.Goods;
 import com.lx.bus.domain.Inport;
-import com.lx.bus.service.GoodsService;
 import com.lx.bus.service.InportService;
 import com.lx.bus.vo.InportVo;
 import com.lx.sys.common.ActiveUser;
 import com.lx.sys.common.ResultObj;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +17,8 @@ import java.util.Date;
 /**
  * @author lx
  */
-@RequestMapping("inport")
-//@RequestMapping("api/inport")
+//@RequestMapping("inport")
+@RequestMapping("api/inport")
 @RestController
 public class InportController {
 
@@ -32,6 +31,7 @@ public class InportController {
     }
 
     @RequestMapping("addInport")
+    @RequiresPermissions("inport:add")
     public ResultObj addInport(Inport inport) {
         try {
             ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
@@ -46,6 +46,7 @@ public class InportController {
     }
 
     @RequestMapping("updateInport")
+    @RequiresPermissions("inport:update")
     public ResultObj updateInport(Inport inport) {
         try {
             this.inportService.updateInport(inport);
@@ -57,6 +58,7 @@ public class InportController {
     }
 
     @RequestMapping("deleteInport")
+    @RequiresPermissions("inport:delete")
     public ResultObj deleteInport(Integer id) {
         try {
             this.inportService.removeById(id);

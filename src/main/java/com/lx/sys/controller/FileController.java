@@ -1,6 +1,5 @@
 package com.lx.sys.controller;
 
-
 import com.lx.sys.common.ActiveUser;
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.upload.UploadService;
@@ -15,14 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 /**
  * @author lx
  */
 @RestController
-@RequestMapping("file")
-//@RequestMapping("api/file")
+//@RequestMapping("file")
+@RequestMapping("api/file")
 public class FileController {
 
     @Autowired
@@ -45,7 +42,6 @@ public class FileController {
         userService.updateUser(user);
         return new DataGridView(map);
     }
-
 
     /**
      * 上传文件

@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @author lx
  **/
 @RestController
+//@RequestMapping("user")
 @RequestMapping("api/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @RequestMapping("loadAllUser")
+    @GetMapping("loadAllUser")
     public Object loadAllUser(UserVo userVo) {
         return this.userService.queryAllUser(userVo);
     }
@@ -81,8 +82,7 @@ public class UserController {
         }
     }
 
-
-    @RequestMapping("deleteUser")
+    @PostMapping("deleteUser")
     public ResultObj deleteUser(Integer id) {
         try {
             this.userService.removeById(id);
@@ -96,7 +96,7 @@ public class UserController {
     /**
      * 保存用户和角色之间的关系
      */
-    @RequestMapping("saveUserRole")
+    @PostMapping("saveUserRole")
     public ResultObj saveUserRole(Integer uid, Integer[] rids) {
         try {
             this.userService.saveUserRole(uid, rids);

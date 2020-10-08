@@ -7,6 +7,7 @@ import com.lx.bus.service.SalesService;
 import com.lx.bus.service.SalesbackService;
 import com.lx.bus.vo.SalesbackVo;
 import com.lx.sys.common.ResultObj;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author lx
  */
-@RequestMapping("salesback")
-//@RequestMapping("api/salesback")
+//@RequestMapping("salesback")
+@RequestMapping("api/salesback")
 @RestController
 public class SalesBackController {
 
@@ -37,6 +38,7 @@ public class SalesBackController {
      * 添加退货信息
      */
     @PostMapping("addSalesback")
+    @RequiresPermissions("sales:salesback")
     public ResultObj addSalesback(Salesback salesback) {
         try {
             Integer sum = salesbackService.querySalesbackSumBySalesId(salesback.getSalesid());
