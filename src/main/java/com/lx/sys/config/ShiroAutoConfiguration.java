@@ -20,6 +20,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.transaction.config.TransactionManagementConfigUtils;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -69,6 +71,7 @@ public class ShiroAutoConfiguration {
      * 声明安全管理器
      */
     @Bean("securityManager")
+    @DependsOn(TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME)
     public SecurityManager securityManager(DefaultWebSessionManager defaultWebSessionManager, SessionDAO redisSession, UserRealm userRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(userRealm);

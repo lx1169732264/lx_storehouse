@@ -1,79 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lx.bus.mapper.GoodsMapper">
-    <resultMap id="BaseResultMap" type="com.lx.bus.domain.Goods">
-        <!--@mbg.generated-->
-        <!--@Table bus_goods-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="goodsname" jdbcType="VARCHAR" property="goodsname"/>
-        <result column="produceplace" jdbcType="VARCHAR" property="produceplace"/>
-        <result column="size" jdbcType="VARCHAR" property="size"/>
-        <result column="goodspackage" jdbcType="VARCHAR" property="goodspackage"/>
-        <result column="productcode" jdbcType="VARCHAR" property="productcode"/>
-        <result column="promitcode" jdbcType="VARCHAR" property="promitcode"/>
-        <result column="description" jdbcType="VARCHAR" property="description"/>
-        <result column="price" jdbcType="DOUBLE" property="price"/>
-        <result column="number" jdbcType="INTEGER" property="number"/>
-        <result column="dangernum" jdbcType="INTEGER" property="dangernum"/>
-        <result column="goodsimg" jdbcType="VARCHAR" property="goodsimg"/>
-        <result column="available" jdbcType="INTEGER" property="available"/>
-        <result column="providerid" jdbcType="INTEGER" property="providerid"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, goodsname, produceplace, `size`, goodspackage, productcode, promitcode, description,
-        price, `number`, dangernum, goodsimg, available, providerid
-    </sql>
+  <resultMap id="BaseResultMap" type="com.lx.bus.domain.Goods">
+    <!--@mbg.generated-->
+    <!--@Table bus_goods-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="goodsname" jdbcType="VARCHAR" property="goodsname" />
+    <result column="produceplace" jdbcType="VARCHAR" property="produceplace" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
+    <result column="goodspackage" jdbcType="VARCHAR" property="goodspackage" />
+    <result column="productcode" jdbcType="VARCHAR" property="productcode" />
+    <result column="promitcode" jdbcType="VARCHAR" property="promitcode" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="goodsimg" jdbcType="VARCHAR" property="goodsimg" />
+    <result column="available" jdbcType="INTEGER" property="available" />
+    <result column="providerid" jdbcType="INTEGER" property="providerid" />
+    <result column="uppernum" jdbcType="INTEGER" property="uppernum" />
+    <result column="lowernum" jdbcType="INTEGER" property="lowernum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, goodsname, produceplace, `size`, goodspackage, productcode, promitcode, description, 
+    price, `number`, goodsimg, available, providerid, uppernum, lowernum
+  </sql>
 
-    <select id="queryOutportSum" resultType="java.lang.Integer">
-        SELECT
-        (IFNULL(a1,0) + IFNULL(b1,0))
-        FROM
-        (
-        SELECT
-        sum( outport.number ) AS a1
-        FROM
-        bus_outport AS outport
-        WHERE
-        1 = 1
-        AND outport.goodsid = #{id}
-        AND outport.outporttime >= #{starttime}
-        AND #{endtime} >= outport.outporttime
-        ) AS a,
-        (
-        SELECT
-        sum( sale.number ) AS b1
-        FROM
-        bus_salesback AS sale
-        WHERE
-        1 = 1
-        AND sale.goodsid = 1
-        AND sale.salesbacktime >= #{starttime}
-        AND #{endtime} >= sale.salesbacktime
-        ) AS b
-    </select>
+  <select id="queryOutportSum" resultType="java.lang.Integer">
+    SELECT
+    (IFNULL(a1,0) + IFNULL(b1,0))
+    FROM
+    (
+    SELECT
+    sum( outport.number ) AS a1
+    FROM
+    bus_outport AS outport
+    WHERE
+    1 = 1
+    AND outport.goodsid = #{id}
+    AND outport.outporttime >= #{starttime}
+    AND #{endtime} >= outport.outporttime
+    ) AS a,
+    (
+    SELECT
+    sum( sale.number ) AS b1
+    FROM
+    bus_salesback AS sale
+    WHERE
+    1 = 1
+    AND sale.goodsid = 1
+    AND sale.salesbacktime >= #{starttime}
+    AND #{endtime} >= sale.salesbacktime
+    ) AS b
+  </select>
 
-    <select id="querySaleSum" resultType="java.lang.Integer">
-        SELECT
-        sum( number )
-        FROM
-        bus_sales
-        WHERE
-        1 = 1
-        AND goodsid =#{id}
-        AND salestime >= #{starttime}
-        AND #{endtime} >= salestime
-    </select>
+  <select id="querySaleSum" resultType="java.lang.Integer">
+    SELECT
+    sum( number )
+    FROM
+    bus_sales
+    WHERE
+    1 = 1
+    AND goodsid =#{id}
+    AND salestime >= #{starttime}
+    AND #{endtime} >= salestime
+  </select>
 
-    <select id="queryLossSum" resultType="java.lang.Integer">
-        SELECT
-        number
-        FROM
-        bus_loss
-        WHERE
-        1 = 1
-        AND id =#{id}
-        AND losstime >= #{starttime}
-        AND #{endtime} >= losstime
-    </select>
+  <select id="queryLossSum" resultType="java.lang.Integer">
+    SELECT
+    number
+    FROM
+    bus_loss
+    WHERE
+    1 = 1
+    AND id =#{id}
+    AND losstime >= #{starttime}
+    AND #{endtime} >= losstime
+  </select>
 </mapper>

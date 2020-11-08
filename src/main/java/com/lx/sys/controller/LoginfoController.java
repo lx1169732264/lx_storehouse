@@ -15,8 +15,8 @@ import java.util.List;
  * @author: lx
  **/
 @RestController
-//@RequestMapping("loginfo")
-@RequestMapping("api/loginfo")
+@RequestMapping("loginfo")
+//@RequestMapping("api/loginfo")
 public class LoginfoController {
 
     @Autowired

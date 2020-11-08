@@ -5,8 +5,14 @@ import com.lx.bus.domain.Inport;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
+/**
+ *
+ * @author lx
+ */
 public interface InportMapper extends BaseMapper<Inport> {
-
     Integer queryInportSum(@Param("id") int id, @Param("starttime") Date starttime, @Param("endtime") Date endtime);
+
+    List<Inport> loadPartInport(@Param("id") int id);
 }

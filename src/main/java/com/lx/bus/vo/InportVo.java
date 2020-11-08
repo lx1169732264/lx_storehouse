@@ -12,6 +12,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class InportVo extends BaseVo {
 
+    private String id;
     private Integer providerid;
     private Integer goodsid;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

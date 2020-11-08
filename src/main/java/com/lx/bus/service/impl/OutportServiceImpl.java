@@ -37,11 +37,11 @@ public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> impl
 
     @Override
     public Outport saveOutport(Outport outport) {
-        Integer inportId = outport.getInportid();
-        Inport inport = inportMapper.selectById(inportId);
+        Inport inport = inportMapper.selectById(outport.getInportid());
         outport.setGoodsid(inport.getGoodsid());
         outport.setNumber(outport.getNumber());
         outport.setPaytype(inport.getPaytype());
+
         ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
         outport.setOperateperson(activeUser.getUser().getName());
         outport.setOutporttime(new Date());

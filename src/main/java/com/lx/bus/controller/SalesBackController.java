@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author lx
  */
-//@RequestMapping("salesback")
-@RequestMapping("api/salesback")
+@RequestMapping("salesback")
+//@RequestMapping("api/salesback")
 @RestController
 public class SalesBackController {
 
@@ -45,13 +45,8 @@ public class SalesBackController {
             if (null != sum && sum > salesService.getById(salesback.getSalesid()).getNumber()) {
                 return new ResultObj(-1, "退货失败!历史退货总数:" + sum + ",本次退货将超过销售数量!");
             }
-
             this.salesbackService.saveSalesback(salesback);
-            Goods goods = goodsService.getById(salesback.getGoodsid());
-            if (goods.getNumber() < goods.getDangernum()) {
-                return new ResultObj(-1, "退货成功!当前库存:" + goods.getNumber() + ", 库存预警:" + goods.getDangernum() + ",请及时补货!");
-            }
-            return ResultObj.ADD_SUCCESS;
+            return new ResultObj(goodsService.getById(salesback.getGoodsid()));
         } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;

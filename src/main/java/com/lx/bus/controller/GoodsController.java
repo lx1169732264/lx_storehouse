@@ -26,8 +26,8 @@ import java.util.*;
 /**
  * @author lx
  */
-//@RequestMapping("goods")
-@RequestMapping("api/goods")
+@RequestMapping("goods")
+//@RequestMapping("api/goods")
 @RestController
 public class GoodsController {
 

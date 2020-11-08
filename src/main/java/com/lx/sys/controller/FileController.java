@@ -18,8 +18,8 @@ import java.util.Map;
  * @author lx
  */
 @RestController
-//@RequestMapping("file")
-@RequestMapping("api/file")
+@RequestMapping("file")
+//@RequestMapping("api/file")
 public class FileController {
 
     @Autowired

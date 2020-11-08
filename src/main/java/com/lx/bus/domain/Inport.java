@@ -4,49 +4,74 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.io.Serializable;
-import java.util.Date;
-
+@ApiModel(value="com-lx-bus-domain-Inport")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "bus_inport")
 public class Inport implements Serializable {
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    /**
+     * 进货id
+     */
+    @TableId(value = "id", type = IdType.INPUT)
+    @ApiModelProperty(value="进货id")
+    private Long id;
+
+    /**
+     * 商品id
+     */
+    @TableId(value = "goodsid", type = IdType.INPUT)
+    @ApiModelProperty(value="商品id")
+    private Integer goodsid;
 
     @TableField(value = "paytype")
+    @ApiModelProperty(value="")
     private String paytype;
 
     @TableField(value = "inporttime")
+    @ApiModelProperty(value="")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date inporttime;
 
     @TableField(value = "operateperson")
+    @ApiModelProperty(value="")
     private String operateperson;
 
     @TableField(value = "number")
+    @ApiModelProperty(value="")
     private Integer number;
 
     @TableField(value = "remark")
+    @ApiModelProperty(value="")
     private String remark;
 
     @TableField(value = "inportprice")
+    @ApiModelProperty(value="")
     private Double inportprice;
 
     @TableField(value = "providerid")
+    @ApiModelProperty(value="")
     private Integer providerid;
+
+    /**
+     * 进货总价
+     */
+    @TableField(value = "price")
+    @ApiModelProperty(value="进货总价")
+    private Double price;
+
 
     @TableField(exist = false)
     private String providername;
-
-    @TableField(value = "goodsid")
-    private Integer goodsid;
 
     @TableField(exist = false)
     private String goodsname;
@@ -54,10 +79,11 @@ public class Inport implements Serializable {
     @TableField(exist = false)
     private String size;
 
-
     private static final long serialVersionUID = 1L;
 
     public static final String COL_ID = "id";
+
+    public static final String COL_GOODSID = "goodsid";
 
     public static final String COL_PAYTYPE = "paytype";
 
@@ -73,5 +99,5 @@ public class Inport implements Serializable {
 
     public static final String COL_PROVIDERID = "providerid";
 
-    public static final String COL_GOODSID = "goodsid";
+    public static final String COL_PRICE = "price";
 }
