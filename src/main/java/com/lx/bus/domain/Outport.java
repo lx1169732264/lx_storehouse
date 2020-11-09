@@ -4,61 +4,77 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.Date;
-
+@ApiModel(value = "com-lx-bus-domain-Outport")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "bus_outport")
 public class Outport implements Serializable {
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    public static final String COL_ID = "id";
+    /**
+     * 进货单号
+     */
+    @TableId(value = "inportid", type = IdType.INPUT)
+    @ApiModelProperty(value = "进货单号")
+    private Long inportid;
+
+    /**
+     * 商品编号
+     */
+    @TableId(value = "goodsid", type = IdType.INPUT)
+    @ApiModelProperty(value = "商品编号")
+    private Integer goodsid;
 
     @TableField(value = "providerid")
+    @ApiModelProperty(value = "")
     private Integer providerid;
+
+    @TableField(value = "paytype")
+    @ApiModelProperty(value = "")
+    private String paytype;
+
+    @TableField(value = "outporttime")
+    @ApiModelProperty(value = "")
+    private Date outporttime;
+
+    @TableField(value = "operateperson")
+    @ApiModelProperty(value = "")
+    private String operateperson;
+
+    @TableField(value = "outportprice")
+    @ApiModelProperty(value = "")
+    private Double outportprice;
+
+    @TableField(value = "number")
+    @ApiModelProperty(value = "")
+    private Integer number;
+
+    @TableField(value = "remark")
+    @ApiModelProperty(value = "")
+    private String remark;
 
     @TableField(exist = false)
     private String providername;
 
-    @TableField(value = "paytype")
-    private String paytype;
-
-    @TableField(value = "outporttime")
-    private Date outporttime;
-
-    @TableField(value = "operateperson")
-    private String operateperson;
-
-    @TableField(value = "outportprice")
-    private Double outportprice;
-
-    @TableField(value = "number")
-    private Integer number;
-
-    @TableField(value = "remark")
-    private String remark;
-
-    @TableField(value = "goodsid")
-    private Integer goodsid;
-
     @TableField(exist = false)
     private String goodsname;
+
     @TableField(exist = false)
     private String size;
 
-    @TableField(value = "inportid")
-    private Integer inportid;
-
-
-
     private static final long serialVersionUID = 1L;
 
-    public static final String COL_ID = "id";
+    public static final String COL_INPORTID = "inportid";
+
+    public static final String COL_GOODSID = "goodsid";
 
     public static final String COL_PROVIDERID = "providerid";
 
@@ -73,8 +89,4 @@ public class Outport implements Serializable {
     public static final String COL_NUMBER = "number";
 
     public static final String COL_REMARK = "remark";
-
-    public static final String COL_GOODSID = "goodsid";
-
-    public static final String COL_INPORTID = "inportid";
 }

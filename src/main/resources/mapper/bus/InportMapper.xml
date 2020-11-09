@@ -1,27 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lx.bus.mapper.InportMapper">
-  <resultMap id="BaseResultMap" type="com.lx.bus.domain.Inport">
-    <!--@mbg.generated-->
-    <!--@Table bus_inport-->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <id column="goodsid" jdbcType="INTEGER" property="goodsid" />
-    <result column="paytype" jdbcType="VARCHAR" property="paytype" />
-    <result column="inporttime" jdbcType="TIMESTAMP" property="inporttime" />
-    <result column="operateperson" jdbcType="VARCHAR" property="operateperson" />
-    <result column="number" jdbcType="INTEGER" property="number" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="inportprice" jdbcType="DOUBLE" property="inportprice" />
-    <result column="providerid" jdbcType="INTEGER" property="providerid" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, goodsid, paytype, inporttime, operateperson, `number`, remark, inportprice, providerid, 
-    price
-  </sql>
+    <resultMap id="BaseResultMap" type="com.lx.bus.domain.Inport">
+        <!--@mbg.generated-->
+        <!--@Table bus_inport-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <id column="goodsid" jdbcType="INTEGER" property="goodsid"/>
+        <result column="paytype" jdbcType="VARCHAR" property="paytype"/>
+        <result column="inporttime" jdbcType="TIMESTAMP" property="inporttime"/>
+        <result column="operateperson" jdbcType="VARCHAR" property="operateperson"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="inportprice" jdbcType="DOUBLE" property="inportprice"/>
+        <result column="providerid" jdbcType="INTEGER" property="providerid"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, goodsid, paytype, inporttime, operateperson, `number`, remark, inportprice, providerid,
+        price
+    </sql>
 
-  <select id="queryInportSum" resultType="java.lang.Integer">
+    <select id="queryAllInport" resultType="com.lx.bus.domain.Inport">
+        SELECT
+        inport.id,inport.operateperson,inport.paytype,
+        sum( inport.price ) as priceSum
+        FROM
+        bus_inport AS inport
+        JOIN bus_goods AS goods ON 1=1
+        and goods.id = inport.goodsid
+        <if test="id != null and id != ''">
+            and inport.id like #{id}
+        </if>
+        GROUP BY
+        inport.id
+        order by inport.id
+        LIMIT #{page},#{limit}
+    </select>
+
+    <select id="queryInportSum" resultType="java.lang.Integer">
     SELECT
     sum( inport.number )
     FROM
@@ -33,7 +50,7 @@
     AND #{endtime} >= inport.inporttime
   </select>
 
-  <select id="loadPartInport" resultType="com.lx.bus.domain.Inport">
+    <select id="loadPartInport" resultType="com.lx.bus.domain.Inport">
     SELECT
     *
     FROM

@@ -82,7 +82,7 @@ public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> impl
     }
 
     @Override
-    public Integer queryOutPortSumByInportId(int inportid) {
+    public Integer queryOutPortSumByInportId(Long inportid) {
         return this.outportMapper.queryOutPortSumByInportId(inportid);
     }
 }

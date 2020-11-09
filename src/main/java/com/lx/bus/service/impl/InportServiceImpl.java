@@ -14,7 +14,6 @@ import com.lx.bus.service.ProviderService;
 import com.lx.bus.vo.InportVo;
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.SnowflakeIdWorker;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,28 +35,7 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
 
     @Override
     public DataGridView queryAllInport(InportVo inportVo) {
-        IPage<Inport> page = new Page<>(inportVo.getPage(), inportVo.getLimit());
-        QueryWrapper<Inport> qw = new QueryWrapper<>();
-        qw.eq(inportVo.getGoodsid() != null, "goodsid", inportVo.getGoodsid());
-        qw.eq(inportVo.getProviderid() != null, "providerid", inportVo.getProviderid());
-        qw.ge(inportVo.getStartTime() != null, "inporttime", inportVo.getStartTime());
-        qw.le(inportVo.getEndTime() != null, "inporttime", inportVo.getEndTime());
-        qw.orderByDesc("inporttime");
-
-        this.inportMapper.selectPage(page, qw);
-        List<Inport> records = page.getRecords();
-        for (Inport record : records) {
-            if (null != record.getGoodsid()) {
-                Goods goods = this.goodsService.getById(record.getGoodsid());
-                record.setGoodsname(goods.getGoodsname());
-                record.setSize(goods.getSize());
-            }
-            if (null != record.getProviderid()) {
-                Provider provider = this.providerService.getById(record.getProviderid());
-                record.setProvidername(provider.getProvidername());
-            }
-        }
-        return new DataGridView(page.getTotal(), records);
+        return  new DataGridView(inportVo.getPage().longValue(), inportMapper.queryAllInport(inportVo));
     }
 
     @Override

@@ -79,6 +79,9 @@ public class Inport implements Serializable {
     @TableField(exist = false)
     private String size;
 
+    @TableField(exist = false)
+    private double priceSum;
+
     private static final long serialVersionUID = 1L;
 
     public static final String COL_ID = "id";

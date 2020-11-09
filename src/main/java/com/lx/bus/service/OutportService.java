@@ -14,6 +14,6 @@ public interface OutportService extends IService<Outport> {
 
     DataGridView queryAllOutport(OutportVo outportVo);
 
-    Integer queryOutPortSumByInportId(int inportid);
+    Integer queryOutPortSumByInportId(Long inportid);
 
 }

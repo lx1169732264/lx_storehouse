@@ -4,6 +4,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lx.bus.domain.Outport;
 
 public interface OutportMapper extends BaseMapper<Outport> {
-
-    Integer queryOutPortSumByInportId(int inportid);
+    Integer queryOutPortSumByInportId(Long inportid);
 }

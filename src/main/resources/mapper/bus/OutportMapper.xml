@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="com.lx.bus.domain.Outport">
     <!--@mbg.generated-->
     <!--@Table bus_outport-->
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="inportid" jdbcType="BIGINT" property="inportid" />
+    <id column="goodsid" jdbcType="INTEGER" property="goodsid" />
     <result column="providerid" jdbcType="INTEGER" property="providerid" />
     <result column="paytype" jdbcType="VARCHAR" property="paytype" />
     <result column="outporttime" jdbcType="TIMESTAMP" property="outporttime" />
@@ -12,15 +13,12 @@
     <result column="outportprice" jdbcType="DOUBLE" property="outportprice" />
     <result column="number" jdbcType="INTEGER" property="number" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="goodsid" jdbcType="INTEGER" property="goodsid" />
-    <result column="inportid" jdbcType="INTEGER" property="inportid" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, providerid, paytype, outporttime, operateperson, outportprice, `number`, remark, 
-    goodsid, inportid
+    inportid, goodsid, providerid, paytype, outporttime, operateperson, outportprice, 
+    `number`, remark
   </sql>
-
 
   <select id="queryOutPortSumByInportId" resultType="java.lang.Integer">
     SELECT
@@ -30,5 +28,6 @@
     WHERE
     1 = 1
     AND inportid =#{inportid}
+    order by inportid
   </select>
 </mapper>
