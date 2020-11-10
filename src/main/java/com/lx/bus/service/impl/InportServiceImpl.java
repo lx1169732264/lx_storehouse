@@ -14,6 +14,7 @@ import com.lx.bus.service.ProviderService;
 import com.lx.bus.vo.InportVo;
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.SnowflakeIdWorker;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
 
     @Override
     public DataGridView queryAllInport(InportVo inportVo) {
-        return  new DataGridView(inportVo.getPage().longValue(), inportMapper.queryAllInport(inportVo));
+        return new DataGridView(inportVo.getPage().longValue(), inportMapper.queryAllInport(inportVo));
     }
 
     @Override
@@ -96,7 +97,10 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
 
     @Override
     public Inport updateInport(Inport inport) {
-        Inport oldObj = this.inportMapper.selectById(inport.getId());
+        QueryWrapper<Inport> qw = new QueryWrapper<>();
+        qw.eq("id", inport.getId());
+        qw.eq("goodsid", inport.getGoodsid());
+        Inport oldObj = this.inportMapper.selectOne(qw);
         Goods goods = this.goodsService.getById(oldObj.getGoodsid());
         goods.setNumber(goods.getNumber() - oldObj.getNumber() + inport.getNumber());
         this.goodsService.updateGoods(goods);

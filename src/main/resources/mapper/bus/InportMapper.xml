@@ -23,15 +23,17 @@
 
     <select id="queryAllInport" resultType="com.lx.bus.domain.Inport">
         SELECT
-        inport.id,inport.operateperson,inport.paytype,
+        inport.id,inport.providerid,provider.providername as providername ,inport.operateperson,inport.paytype,
         sum( inport.price ) as priceSum
         FROM
-        bus_inport AS inport
+        (bus_inport AS inport
         JOIN bus_goods AS goods ON 1=1
         and goods.id = inport.goodsid
         <if test="id != null and id != ''">
             and inport.id like #{id}
-        </if>
+        </if>)
+        join bus_provider as provider on
+        provider.id =inport.providerid
         GROUP BY
         inport.id
         order by inport.id
@@ -39,24 +41,24 @@
     </select>
 
     <select id="queryInportSum" resultType="java.lang.Integer">
-    SELECT
-    sum( inport.number )
-    FROM
-    bus_inport as inport
-    WHERE
-    1 = 1
-    AND inport.goodsid =#{id}
-    AND inport.inporttime >= #{starttime}
-    AND #{endtime} >= inport.inporttime
-  </select>
+        SELECT
+        sum( inport.number )
+        FROM
+        bus_inport as inport
+        WHERE
+        1 = 1
+        AND inport.goodsid =#{id}
+        AND inport.inporttime >= #{starttime}
+        AND #{endtime} >= inport.inporttime
+    </select>
 
     <select id="loadPartInport" resultType="com.lx.bus.domain.Inport">
-    SELECT
-    *
-    FROM
-    bus_inport as inport
-    WHERE
-    1 = 1
-    AND inport.inportid =#{id}
-  </select>
+        SELECT
+        *
+        FROM
+        bus_inport as inport
+        WHERE
+        1 = 1
+        AND inport.inportid =#{id}
+    </select>
 </mapper>

@@ -67,12 +67,12 @@ public class InportController {
     @RequestMapping("deleteInport")
     @RequiresPermissions("inport:delete")
     public ResultObj deleteInport(Integer id) {
-        try {
-            this.inportService.removeById(id);
-            return ResultObj.DELETE_SUCCESS;
-        } catch (Exception e) {
-            e.printStackTrace();
+//        try {
+//            this.inportService.removeById(id);
+//            return ResultObj.DELETE_SUCCESS;
+//        } catch (Exception e) {
+//            e.printStackTrace();
             return ResultObj.DELETE_ERROR;
-        }
+//        }
     }
 }
