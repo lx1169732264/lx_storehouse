@@ -16,9 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(value = "bus_outport")
+@TableName(value = "lx_storehouse.bus_outport")
 public class Outport implements Serializable {
-    public static final String COL_ID = "id";
     /**
      * 进货单号
      */

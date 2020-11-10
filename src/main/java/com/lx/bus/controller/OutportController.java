@@ -1,6 +1,5 @@
 package com.lx.bus.controller;
 
-import com.lx.bus.domain.Goods;
 import com.lx.bus.domain.Outport;
 import com.lx.bus.service.GoodsService;
 import com.lx.bus.service.InportService;
@@ -38,7 +37,7 @@ public class OutportController {
         try {
             Integer sum = outportService.queryOutPortSumByInportId(outport.getInportid());
             if (null != sum && sum > inportService.getById(outport.getInportid()).getNumber()) {
-                return new ResultObj(-1, "退货失败!历史退货总数:" + sum + ",本次退货将超过进货数量!");
+                return new ResultObj(-1, "退货失败!退货总数:" + sum + ",将超过进货数量!");
             }
             this.outportService.saveOutport(outport);
             return new ResultObj(goodsService.getById(outport.getGoodsid()));

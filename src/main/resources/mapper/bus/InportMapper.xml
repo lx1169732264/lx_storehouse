@@ -23,42 +23,309 @@
 
     <select id="queryAllInport" resultType="com.lx.bus.domain.Inport">
         SELECT
-        inport.id,inport.providerid,provider.providername as providername ,inport.operateperson,inport.paytype,
-        sum( inport.price ) as priceSum
+        tmp.*,
+        provider.providername AS providername
         FROM
-        (bus_inport AS inport
-        JOIN bus_goods AS goods ON 1=1
-        and goods.id = inport.goodsid
+        bus_provider AS provider
+        JOIN (
+        SELECT
+        inport.id,
+        inport.providerid,
+        inport.operateperson,
+        inport.paytype,
+        sum( inport.price ) AS priceSum
+        FROM
+        bus_inport AS inport
+        JOIN bus_goods AS goods ON 1 = 1
+        AND goods.id = inport.goodsid
         <if test="id != null and id != ''">
             and inport.id like #{id}
-        </if>)
-        join bus_provider as provider on
-        provider.id =inport.providerid
+        </if>
         GROUP BY
         inport.id
-        order by inport.id
+        ) AS tmp
+        on 1=1
+        and provider.id = tmp.providerid
+        <if test="id != null and id != ''">
+            and provider.id =#{providerid}
+        </if>
+        order by tmp.id desc
         LIMIT #{page},#{limit}
     </select>
 
     <select id="queryInportSum" resultType="java.lang.Integer">
-        SELECT
-        sum( inport.number )
-        FROM
-        bus_inport as inport
-        WHERE
-        1 = 1
-        AND inport.goodsid =#{id}
-        AND inport.inporttime >= #{starttime}
-        AND #{endtime} >= inport.inporttime
-    </select>
+    SELECT
+    sum( inport.number )
+    FROM
+    bus_inport as inport
+    WHERE
+    1 = 1
+    AND inport.goodsid =#{id}
+    AND inport.inporttime >= #{starttime}
+    AND #{endtime} >= inport.inporttime
+  </select>
 
     <select id="loadPartInport" resultType="com.lx.bus.domain.Inport">
-        SELECT
-        *
-        FROM
-        bus_inport as inport
-        WHERE
-        1 = 1
-        AND inport.inportid =#{id}
-    </select>
+    SELECT
+    *
+    FROM
+    bus_inport as inport
+    WHERE
+    1 = 1
+    AND inport.inportid =#{id}
+  </select>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update bus_inport
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="paytype = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.paytype,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="inporttime = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.inporttime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="operateperson = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.operateperson,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="`number` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.number,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="remark = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.remark,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="inportprice = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.inportprice,jdbcType=DOUBLE}
+                </foreach>
+            </trim>
+            <trim prefix="providerid = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.providerid,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="price = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.price,jdbcType=DOUBLE}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update bus_inport
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="paytype = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.paytype != null">
+                        when id = #{item.id,jdbcType=BIGINT} then #{item.paytype,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="inporttime = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.inporttime != null">
+                        when id = #{item.id,jdbcType=BIGINT} then #{item.inporttime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="operateperson = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.operateperson != null">
+                        when id = #{item.id,jdbcType=BIGINT} then #{item.operateperson,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="`number` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.number != null">
+                        when id = #{item.id,jdbcType=BIGINT} then #{item.number,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.remark != null">
+                        when id = #{item.id,jdbcType=BIGINT} then #{item.remark,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="inportprice = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.inportprice != null">
+                        when id = #{item.id,jdbcType=BIGINT} then #{item.inportprice,jdbcType=DOUBLE}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="providerid = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.providerid != null">
+                        when id = #{item.id,jdbcType=BIGINT} then #{item.providerid,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="price = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.price != null">
+                        when id = #{item.id,jdbcType=BIGINT} then #{item.price,jdbcType=DOUBLE}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    <insert id="batchInsert" parameterType="map">
+        <!--@mbg.generated-->
+        insert into bus_inport
+        (id, goodsid, paytype, inporttime, operateperson, `number`, remark, inportprice,
+        providerid, price)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id,jdbcType=BIGINT}, #{item.goodsid,jdbcType=INTEGER}, #{item.paytype,jdbcType=VARCHAR},
+            #{item.inporttime,jdbcType=TIMESTAMP}, #{item.operateperson,jdbcType=VARCHAR},
+            #{item.number,jdbcType=INTEGER}, #{item.remark,jdbcType=VARCHAR}, #{item.inportprice,jdbcType=DOUBLE},
+            #{item.providerid,jdbcType=INTEGER}, #{item.price,jdbcType=DOUBLE})
+        </foreach>
+    </insert>
+    <insert id="insertOrUpdate" parameterType="com.lx.bus.domain.Inport">
+        <!--@mbg.generated-->
+        insert into bus_inport
+        (id, goodsid, paytype, inporttime, operateperson, `number`, remark, inportprice,
+        providerid, price)
+        values
+        (#{id,jdbcType=BIGINT}, #{goodsid,jdbcType=INTEGER}, #{paytype,jdbcType=VARCHAR},
+        #{inporttime,jdbcType=TIMESTAMP}, #{operateperson,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER},
+        #{remark,jdbcType=VARCHAR}, #{inportprice,jdbcType=DOUBLE}, #{providerid,jdbcType=INTEGER},
+        #{price,jdbcType=DOUBLE})
+        on duplicate key update
+        id = #{id,jdbcType=BIGINT},
+        goodsid = #{goodsid,jdbcType=INTEGER},
+        paytype = #{paytype,jdbcType=VARCHAR},
+        inporttime = #{inporttime,jdbcType=TIMESTAMP},
+        operateperson = #{operateperson,jdbcType=VARCHAR},
+        `number` = #{number,jdbcType=INTEGER},
+        remark = #{remark,jdbcType=VARCHAR},
+        inportprice = #{inportprice,jdbcType=DOUBLE},
+        providerid = #{providerid,jdbcType=INTEGER},
+        price = #{price,jdbcType=DOUBLE}
+    </insert>
+    <insert id="insertOrUpdateSelective" parameterType="com.lx.bus.domain.Inport">
+        <!--@mbg.generated-->
+        insert into bus_inport
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="paytype != null">
+                paytype,
+            </if>
+            <if test="inporttime != null">
+                inporttime,
+            </if>
+            <if test="operateperson != null">
+                operateperson,
+            </if>
+            <if test="number != null">
+                `number`,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="inportprice != null">
+                inportprice,
+            </if>
+            <if test="providerid != null">
+                providerid,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="paytype != null">
+                #{paytype,jdbcType=VARCHAR},
+            </if>
+            <if test="inporttime != null">
+                #{inporttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operateperson != null">
+                #{operateperson,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="inportprice != null">
+                #{inportprice,jdbcType=DOUBLE},
+            </if>
+            <if test="providerid != null">
+                #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="goodsid != null">
+                goodsid = #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="paytype != null">
+                paytype = #{paytype,jdbcType=VARCHAR},
+            </if>
+            <if test="inporttime != null">
+                inporttime = #{inporttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operateperson != null">
+                operateperson = #{operateperson,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                `number` = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="inportprice != null">
+                inportprice = #{inportprice,jdbcType=DOUBLE},
+            </if>
+            <if test="providerid != null">
+                providerid = #{providerid,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
 </mapper>

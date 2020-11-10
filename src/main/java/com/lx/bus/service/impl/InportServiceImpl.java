@@ -3,26 +3,30 @@ package com.lx.bus.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lx.bus.domain.Goods;
-import com.lx.bus.domain.Inport;
 import com.lx.bus.domain.Provider;
-import com.lx.bus.mapper.InportMapper;
 import com.lx.bus.service.GoodsService;
-import com.lx.bus.service.InportService;
 import com.lx.bus.service.ProviderService;
 import com.lx.bus.vo.InportVo;
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.SnowflakeIdWorker;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import java.util.List;
+
+import com.lx.bus.domain.Inport;
+import com.lx.bus.mapper.InportMapper;
+import com.lx.bus.service.InportService;
 
 @Service
 public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> implements InportService {
@@ -53,15 +57,12 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
         this.inportMapper.selectPage(page, qw);
         List<Inport> records = page.getRecords();
         for (Inport record : records) {
-            if (null != record.getGoodsid()) {
-                Goods goods = this.goodsService.getById(record.getGoodsid());
-                record.setGoodsname(goods.getGoodsname());
-                record.setSize(goods.getSize());
-            }
-            if (null != record.getProviderid()) {
-                Provider provider = this.providerService.getById(record.getProviderid());
-                record.setProvidername(provider.getProvidername());
-            }
+            Goods goods = this.goodsService.getById(record.getGoodsid());
+            record.setGoodsname(goods.getGoodsname());
+            record.setSize(goods.getSize());
+
+            Provider provider = this.providerService.getById(record.getProviderid());
+            record.setProvidername(provider.getProvidername());
         }
         return new DataGridView(page.getTotal(), records);
     }
@@ -86,12 +87,9 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
         this.inportMapper.insert(inport);
 
         //更新库存
-        Integer goodsId = inport.getGoodsid();
-        if (goodsId != null) {
-            Goods goods = this.goodsService.getById(goodsId);
-            goods.setNumber(goods.getNumber() + inport.getNumber());
-            this.goodsService.updateGoods(goods);
-        }
+        Goods goods = this.goodsService.getById(inport.getGoodsid());
+        goods.setNumber(goods.getNumber() + inport.getNumber());
+        this.goodsService.updateGoods(goods);
         return inport;
     }
 
@@ -104,7 +102,10 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
         Goods goods = this.goodsService.getById(oldObj.getGoodsid());
         goods.setNumber(goods.getNumber() - oldObj.getNumber() + inport.getNumber());
         this.goodsService.updateGoods(goods);
-        this.inportMapper.updateById(inport);
+        BigDecimal a1 = BigDecimal.valueOf(inport.getInportprice());
+        BigDecimal aa = new BigDecimal(inport.getNumber());
+        inport.setPrice(a1.multiply(aa).doubleValue());
+        this.inportMapper.insertOrUpdateSelective(inport);
         return inport;
     }
 
@@ -115,5 +116,30 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
         goods.setNumber(goods.getNumber() - inport.getNumber());
         this.goodsService.updateGoods(goods);
         return super.removeById(id);
+    }
+
+    @Override
+    public int updateBatch(List<Inport> list) {
+        return baseMapper.updateBatch(list);
+    }
+
+    @Override
+    public int updateBatchSelective(List<Inport> list) {
+        return baseMapper.updateBatchSelective(list);
+    }
+
+    @Override
+    public int batchInsert(List<Inport> list) {
+        return baseMapper.batchInsert(list);
+    }
+
+    @Override
+    public int insertOrUpdate(Inport record) {
+        return baseMapper.insertOrUpdate(record);
+    }
+
+    @Override
+    public int insertOrUpdateSelective(Inport record) {
+        return baseMapper.insertOrUpdateSelective(record);
     }
 }

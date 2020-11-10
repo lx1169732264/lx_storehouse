@@ -3,7 +3,7 @@
 <mapper namespace="com.lx.bus.mapper.OutportMapper">
   <resultMap id="BaseResultMap" type="com.lx.bus.domain.Outport">
     <!--@mbg.generated-->
-    <!--@Table bus_outport-->
+    <!--@Table lx_storehouse.bus_outport-->
     <id column="inportid" jdbcType="BIGINT" property="inportid" />
     <id column="goodsid" jdbcType="INTEGER" property="goodsid" />
     <result column="providerid" jdbcType="INTEGER" property="providerid" />
@@ -22,12 +22,12 @@
 
   <select id="queryOutPortSumByInportId" resultType="java.lang.Integer">
     SELECT
-    sum( number )
+    outport.number
     FROM
-    bus_outport
+    bus_outport as outport
     WHERE
     1 = 1
-    AND inportid =#{inportid}
-    order by inportid
+    AND outport.inportid =#{inportid}
+    and outport.goodsid =#{goodsid}
   </select>
 </mapper>

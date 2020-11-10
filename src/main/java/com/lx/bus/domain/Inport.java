@@ -69,7 +69,6 @@ public class Inport implements Serializable {
     @ApiModelProperty(value="进货总价")
     private Double price;
 
-
     @TableField(exist = false)
     private String providername;
 
