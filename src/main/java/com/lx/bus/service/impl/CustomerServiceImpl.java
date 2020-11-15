@@ -30,54 +30,49 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Override
     public DataGridView queryAllCustomer(CustomerVo customerVo) {
-        IPage<Customer> page=new Page<>(customerVo.getPage(),customerVo.getLimit());
-        QueryWrapper<Customer> qw=new QueryWrapper<>();
-        qw.eq(customerVo.getAvailable()!=null,"available",customerVo.getAvailable());
-        qw.like(StringUtils.isNotBlank(customerVo.getCustomername()),"customername",customerVo.getCustomername());
-        qw.like(StringUtils.isNotBlank(customerVo.getConnectionperson()),"connectionperson",customerVo.getConnectionperson());
-        if(StringUtils.isNotBlank(customerVo.getPhone())){
-            qw.and(new Consumer<QueryWrapper<Customer>>() {
-                @Override
-                public void accept(QueryWrapper<Customer> customerQueryWrapper) {
-                    customerQueryWrapper.like(StringUtils.isNotBlank(customerVo.getPhone()),"phone",customerVo.getPhone())
-                            .or().like(StringUtils.isNotBlank(customerVo.getPhone()),"telephone",customerVo.getPhone());
-                }
-            });
+        IPage<Customer> page = new Page<>(customerVo.getPage(), customerVo.getLimit());
+        QueryWrapper<Customer> qw = new QueryWrapper<>();
+        qw.eq(customerVo.getAvailable() != null, "available", customerVo.getAvailable());
+        qw.like(StringUtils.isNotBlank(customerVo.getCustomername()), "customername", customerVo.getCustomername());
+        qw.like(StringUtils.isNotBlank(customerVo.getConnectionperson()), "connectionperson", customerVo.getConnectionperson());
+        if (StringUtils.isNotBlank(customerVo.getPhone())) {
+            qw.and(customerQueryWrapper -> customerQueryWrapper.like(StringUtils.isNotBlank(customerVo.getPhone()), "phone", customerVo.getPhone())
+                    .or().like(StringUtils.isNotBlank(customerVo.getPhone()), "telephone", customerVo.getPhone()));
         }
-        this.customerMapper.selectPage(page,qw);
-        return new DataGridView(page.getTotal(),page.getRecords());
+        this.customerMapper.selectPage(page, qw);
+        return new DataGridView(page.getTotal(), page.getRecords());
     }
 
-    @CachePut(cacheNames = "com.lx.bus.service.impl.CustomerServiceImpl",key = "#result.id")
+    @CachePut(cacheNames = "com.lx.bus.service.impl.CustomerServiceImpl", key = "#result.id")
     @Override
     public Customer saveCustomer(Customer customer) {
         this.customerMapper.insert(customer);
         return customer;
     }
 
-    @CachePut(cacheNames = "com.lx.bus.service.impl.CustomerServiceImpl",key = "#result.id")
+    @CachePut(cacheNames = "com.lx.bus.service.impl.CustomerServiceImpl", key = "#result.id")
     @Override
     public Customer updateCustomer(Customer customer) {
         Customer selectById = this.customerMapper.selectById(customer.getId());
-        BeanUtil.copyProperties(customer,selectById, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
+        BeanUtil.copyProperties(customer, selectById, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         this.customerMapper.updateById(selectById);
         return selectById;
     }
 
     @Override
     public DataGridView getAllAvailableCustomer() {
-        QueryWrapper<Customer> qw=new QueryWrapper<>();
+        QueryWrapper<Customer> qw = new QueryWrapper<>();
         qw.eq("available", Constant.AVAILABLE_TRUE);
         return new DataGridView(this.customerMapper.selectList(qw));
     }
 
-    @Cacheable(cacheNames = "com.lx.bus.service.impl.CustomerServiceImpl",key = "#id")
+    @Cacheable(cacheNames = "com.lx.bus.service.impl.CustomerServiceImpl", key = "#id")
     @Override
     public Customer getById(Serializable id) {
         return super.getById(id);
     }
 
-    @CacheEvict(cacheNames = "com.lx.bus.service.impl.CustomerServiceImpl",key = "#id")
+    @CacheEvict(cacheNames = "com.lx.bus.service.impl.CustomerServiceImpl", key = "#id")
     @Override
     public boolean removeById(Serializable id) {
         return super.removeById(id);

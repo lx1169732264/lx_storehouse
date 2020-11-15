@@ -1,59 +1,89 @@
 package com.lx.bus.domain;
 
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.Date;
-
+@ApiModel(value="com-lx-bus-domain-Sales")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(value = "bus_sales")
+@TableName(value = "lx_storehouse.bus_sales")
 public class Sales implements Serializable {
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    /**
+     * 销售单号
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @TableId(value = "id", type = IdType.INPUT)
+    @ApiModelProperty(value="销售单号")
+    private Long id;
+
+    /**
+     * 商品编号
+     */
+    @TableId(value = "goodsid", type = IdType.INPUT)
+    @ApiModelProperty(value="商品编号")
+    private Integer goodsid;
 
     @TableField(value = "customerid")
+    @ApiModelProperty(value="")
     private Integer customerid;
+
+    @TableField(value = "paytype")
+    @ApiModelProperty(value="")
+    private String paytype;
+
+    @TableField(value = "salestime")
+    @ApiModelProperty(value="")
+    private Date salestime;
+
+    @TableField(value = "operateperson")
+    @ApiModelProperty(value="")
+    private String operateperson;
+
+    @TableField(value = "number")
+    @ApiModelProperty(value="")
+    private Integer number;
+
+    @TableField(value = "remark")
+    @ApiModelProperty(value="")
+    private String remark;
+
+    @TableField(value = "saleprice")
+    @ApiModelProperty(value="")
+    private double saleprice;
+
+    @TableField(value = "price")
+    @ApiModelProperty(value="销售总价")
+    private Double price;
 
     @TableField(exist = false)
     private String customername;
 
-    @TableField(value = "paytype")
-    private String paytype;
-
-    @TableField(value = "salestime")
-    private Date salestime;
-
-    @TableField(value = "operateperson")
-    private String operateperson;
-
-    @TableField(value = "number")
-    private Integer number;
-
-    @TableField(value = "remark")
-    private String remark;
-
-    @TableField(value = "saleprice")
-    private Double saleprice;
-
-    @TableField(value = "goodsid")
-    private Integer goodsid;
-
     @TableField(exist = false)
     private String goodsname;
+
     @TableField(exist = false)
     private String size;
 
     private static final long serialVersionUID = 1L;
 
     public static final String COL_ID = "id";
+
+    public static final String COL_GOODSID = "goodsid";
 
     public static final String COL_CUSTOMERID = "customerid";
 
@@ -68,6 +98,4 @@ public class Sales implements Serializable {
     public static final String COL_REMARK = "remark";
 
     public static final String COL_SALEPRICE = "saleprice";
-
-    public static final String COL_GOODSID = "goodsid";
 }

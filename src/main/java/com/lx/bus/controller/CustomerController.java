@@ -68,7 +68,6 @@ public class CustomerController {
         }
     }
 
-
     @RequestMapping("batchDeleteCustomer")
     @RequiresPermissions("customer:delete")
     public ResultObj batchdeleteCustomer(Integer[] ids) {

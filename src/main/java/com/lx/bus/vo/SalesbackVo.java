@@ -11,8 +11,12 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper=false)
 public class SalesbackVo extends BaseVo {
 
+    private Long id;
+
     private Integer customerid;
+
     private Integer goodsid;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

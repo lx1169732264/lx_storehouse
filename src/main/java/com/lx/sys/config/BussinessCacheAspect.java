@@ -1,9 +1,11 @@
 package com.lx.sys.config;
 
+import com.alibaba.fastjson.JSON;
 import com.lx.bus.domain.Goods;
 import com.lx.bus.domain.Inport;
 import com.lx.bus.service.GoodsService;
 import com.lx.bus.vo.InportVo;
+import com.lx.sys.common.Constant;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -33,8 +35,6 @@ import java.util.Collection;
 @EnableAspectJAutoProxy
 public class BussinessCacheAspect {
 
-    private static final String UPPER_PROFIX = "upper:";
-    private static final String LOWER_PROFIX = "lower:";
     private static final String POINTCUT_GOODS_UPDATE = "execution(* com.lx.bus.service.impl.GoodsServiceImpl.updateGoods(..))";
 
     /**
@@ -51,7 +51,7 @@ public class BussinessCacheAspect {
     }
 
     /**
-     * 更新切入
+     * 更新库存切入
      */
     @Around(POINTCUT_GOODS_UPDATE)
     public Object cacheInportUpdate(ProceedingJoinPoint joinPoint) {
@@ -60,9 +60,12 @@ public class BussinessCacheAspect {
         //取出第一个参数
         Goods goods = (Goods) joinPoint.getArgs()[0];
         if (goods.getNumber() > goods.getUppernum()) {
-            opsForValue.set(UPPER_PROFIX, goods);
+            opsForValue.set(Constant.UPPER_PROFIX + goods.getId(), goods);
         } else if (goods.getNumber() < goods.getLowernum()) {
-            opsForValue.set(LOWER_PROFIX, goods);
+            opsForValue.set(Constant.LOWER_PROFIX + goods.getId(), goods);
+        }else {
+            redisTemplate.delete(Constant.UPPER_PROFIX + goods.getId());
+            redisTemplate.delete(Constant.LOWER_PROFIX + goods.getId());
         }
         return goods;
     }

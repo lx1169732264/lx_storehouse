@@ -9,6 +9,8 @@ import com.lx.sys.common.ResultObj;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,27 +27,24 @@ public class SalesController {
     @Autowired
     private SalesService salesService;
 
-    @RequestMapping("loadAllSales")
+    @GetMapping("loadAllSales")
     public Object loadAllSales(SalesVo salesVo) {
         return this.salesService.queryAllSales(salesVo);
     }
 
-    @RequestMapping("addSales")
-    @RequiresPermissions("sales:add")
-    public ResultObj addSales(Sales sales) {
-        try {
-            ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
-            sales.setOperateperson(activeUser.getUser().getName());
-            sales.setSalestime(new Date());
-            this.salesService.saveSales(sales);
-            return ResultObj.ADD_SUCCESS;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultObj.ADD_ERROR;
-        }
+    @GetMapping("loadPartSales")
+    public Object loadPartSales(SalesVo salesVo) {
+        return this.salesService.queryPartInport(salesVo);
     }
 
-    @RequestMapping("updateSales")
+    @PostMapping("addSales")
+    @RequiresPermissions("sales:add")
+    public ResultObj addSales(Sales sales) {
+        this.salesService.saveSales(sales);
+        return ResultObj.ADD_SUCCESS;
+    }
+
+    @PostMapping("updateSales")
     @RequiresPermissions("sales:update")
     public ResultObj updateSales(Sales sales) {
         try {
@@ -57,15 +56,15 @@ public class SalesController {
         }
     }
 
-    @RequestMapping("deleteSales")
+    @PostMapping("deleteSales")
     @RequiresPermissions("sales:delete")
     public ResultObj deleteSales(Integer id) {
-        try {
-            this.salesService.removeById(id);
-            return ResultObj.DELETE_SUCCESS;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultObj.DELETE_ERROR;
-        }
+//        try {
+//            this.salesService.removeById(id);
+//            return ResultObj.DELETE_SUCCESS;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+        return ResultObj.DELETE_ERROR;
+//        }
     }
 }

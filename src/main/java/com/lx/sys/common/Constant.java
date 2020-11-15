@@ -14,6 +14,9 @@ public class Constant {
     public static final Integer USER_TYPE_SUPER=0;
     public static final Integer USER_TYPE_NORMAL=1;
 
+    public static final String UPPER_PROFIX = "upper::";
+    public static final String LOWER_PROFIX = "lower::";
+
 
     /**
      * 可用类型

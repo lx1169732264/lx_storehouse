@@ -12,6 +12,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class SalesVo extends BaseVo {
 
+    private Long id;
     private Integer customerid;
 
     private Integer goodsid;

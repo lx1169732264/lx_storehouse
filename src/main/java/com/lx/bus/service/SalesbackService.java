@@ -1,9 +1,10 @@
 package com.lx.bus.service;
 
+import java.util.List;
 import com.lx.bus.domain.Salesback;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.lx.bus.vo.SalesbackVo;
 import com.lx.sys.common.DataGridView;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface SalesbackService extends IService<Salesback>{
 
@@ -11,5 +12,12 @@ public interface SalesbackService extends IService<Salesback>{
 
     DataGridView queryAllSalesback(SalesbackVo salesbackVo);
 
-    Integer querySalesbackSumBySalesId(int salesid);
+    Integer querySalesbackSumBySalesId(Long salesid);
+
+    int updateBatch(List<Salesback> list);
+
+    int updateBatchSelective(List<Salesback> list);
+
+    int batchInsert(List<Salesback> list);
+
 }

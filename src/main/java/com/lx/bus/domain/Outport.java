@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -21,6 +23,7 @@ public class Outport implements Serializable {
     /**
      * 进货单号
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId(value = "inportid", type = IdType.INPUT)
     @ApiModelProperty(value = "进货单号")
     private Long inportid;
