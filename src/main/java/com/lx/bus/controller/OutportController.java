@@ -21,10 +21,6 @@ public class OutportController {
 
     @Autowired
     private OutportService outportService;
-    @Autowired
-    private GoodsService goodsService;
-    @Autowired
-    private InportService inportService;
 
     @RequestMapping("loadAllOutport")
     public Object loadAllOutport(OutportVo outportVo) {
@@ -35,12 +31,7 @@ public class OutportController {
     @RequiresPermissions("inport:outport")
     public ResultObj addOutport(Outport outport) {
         try {
-            Integer sum = outportService.queryOutPortSumByInportId(outport.getInportid());
-            if (null != sum && sum > inportService.getById(outport.getInportid()).getNumber()) {
-                return new ResultObj(-1, "退货失败!退货总数:" + sum + ",将超过进货数量!");
-            }
-            this.outportService.saveOutport(outport);
-            return new ResultObj(goodsService.getById(outport.getGoodsid()));
+            return this.outportService.saveOutport(outport);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.ADD_ERROR;

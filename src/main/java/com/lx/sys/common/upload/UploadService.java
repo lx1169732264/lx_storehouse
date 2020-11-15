@@ -29,7 +29,7 @@ public class UploadService {
     private UploadProperties prop;
 
     public String uploadImage(MultipartFile file) {
-        // 1、校验文件类型/内容
+        // 校验文件类型/内容
         String contentType = file.getContentType();
         if (!prop.getAllowTypes().contains(contentType)) {
             throw new RuntimeException("文件类型不支持");

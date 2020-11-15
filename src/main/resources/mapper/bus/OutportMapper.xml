@@ -20,7 +20,7 @@
     `number`, remark
   </sql>
 
-  <select id="queryOutPortSumByInportId" resultType="java.lang.Integer">
+  <select id="queryOutPortSum" resultType="java.lang.Integer">
     SELECT
     outport.number
     FROM

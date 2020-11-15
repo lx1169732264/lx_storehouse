@@ -72,6 +72,9 @@ public class Outport implements Serializable {
     @TableField(exist = false)
     private String size;
 
+    @TableField(exist = false)
+    private Integer inportNum;
+
     private static final long serialVersionUID = 1L;
 
     public static final String COL_INPORTID = "inportid";

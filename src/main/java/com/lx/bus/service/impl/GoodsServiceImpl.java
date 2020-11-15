@@ -33,6 +33,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     private GoodsMapper goodsMapper;
     @Autowired
     private ProviderService providerService;
+    @Autowired
+    private WarningServiceImpl warningService;
 
     @Override
     public DataGridView queryAllGoods(GoodsVo goodsVo) {
@@ -69,6 +71,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         Goods selectById = this.goodsMapper.selectById(goods.getId());
         BeanUtil.copyProperties(goods,selectById, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         this.goodsMapper.updateById(selectById);
+        warningService.stockWarning(goods);
         return selectById;
     }
 
@@ -86,8 +89,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             return new DataGridView();
         }
         QueryWrapper<Goods> qw=new QueryWrapper<>();
-        qw.eq("available", Constant.AVAILABLE_TRUE);
-        qw.eq("providerid",providerid);
+        qw.eq("available", Constant.AVAILABLE_TRUE).eq("providerid",providerid);
         List<Goods> goods = this.goodsMapper.selectList(qw);
         return new DataGridView(goods);
     }

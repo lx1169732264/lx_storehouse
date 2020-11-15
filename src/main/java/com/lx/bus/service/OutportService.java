@@ -4,15 +4,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lx.bus.domain.Outport;
 import com.lx.bus.vo.OutportVo;
 import com.lx.sys.common.DataGridView;
-
-import java.util.List;
+import com.lx.sys.common.ResultObj;
 
 public interface OutportService extends IService<Outport> {
 
-    Outport saveOutport(Outport outport);
+    ResultObj saveOutport(Outport outport);
 
     DataGridView queryAllOutport(OutportVo outportVo);
 
-    Integer queryOutPortSumByInportId(Long inportid);
+    Integer queryOutPortSum(Long inportid,int goodsid);
 
 }

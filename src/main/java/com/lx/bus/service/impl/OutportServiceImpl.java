@@ -11,11 +11,13 @@ import com.lx.bus.domain.Outport;
 import com.lx.bus.mapper.InportMapper;
 import com.lx.bus.mapper.OutportMapper;
 import com.lx.bus.service.GoodsService;
+import com.lx.bus.service.InportService;
 import com.lx.bus.service.OutportService;
 import com.lx.bus.service.ProviderService;
 import com.lx.bus.vo.OutportVo;
 import com.lx.sys.common.ActiveUser;
 import com.lx.sys.common.DataGridView;
+import com.lx.sys.common.ResultObj;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,7 @@ import java.util.List;
 
 @Service
 public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> implements OutportService {
-    @Autowired
-    private InportMapper inportMapper;
+
     @Autowired
     private OutportMapper outportMapper;
     @Autowired
@@ -35,28 +36,24 @@ public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> impl
     private ProviderService providerService;
 
     @Override
-    public Outport saveOutport(Outport outport) {
+    public ResultObj saveOutport(Outport outport) {
         QueryWrapper<Outport> qw2 = new QueryWrapper<>();
-        qw2.eq("inportid", outport.getInportid()).eq("goodsid", outport.getGoodsid());
+        qw2.eq(Outport.COL_INPORTID, outport.getInportid()).eq(Outport.COL_GOODSID, outport.getGoodsid());
         Outport one = outportMapper.selectOne(qw2);
+
         if (null != one) {
-            one.setNumber(outport.getNumber() + one.getNumber());
-            UpdateWrapper<Outport> qw3 = new UpdateWrapper<>(one);
+            int sum = one.getNumber() + outport.getNumber();
+            if (sum > outport.getInportNum()) {
+                return new ResultObj(-1, "退货失败!退货总数:" + sum + ",超过进货数量:" + outport.getInportNum());
+            }
+            one.setNumber(sum);
+            UpdateWrapper<Outport> qw3 = new UpdateWrapper<>();
             qw3.eq("inportid", one.getInportid()).eq("goodsid", one.getGoodsid());
             this.outportMapper.update(one, qw3);
         } else {
-            QueryWrapper<Inport> qw = new QueryWrapper<>();
-            qw.eq("id", outport.getInportid()).eq("goodsid", outport.getGoodsid());
-            Inport inport = inportMapper.selectOne(qw);
-
-            outport.setOutportprice(inport.getInportprice());
-            outport.setProviderid(inport.getProviderid());
-            outport.setPaytype(inport.getPaytype());
-
             ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
             outport.setOperateperson(activeUser.getUser().getName());
             outport.setOutporttime(new Date());
-
             this.outportMapper.insert(outport);
         }
 
@@ -64,7 +61,7 @@ public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> impl
         Goods goods = this.goodsService.getById(outport.getGoodsid());
         goods.setNumber(goods.getNumber() - outport.getNumber());
         this.goodsService.updateGoods(goods);
-        return outport;
+        return ResultObj.ADD_SUCCESS;
     }
 
     @Override
@@ -86,8 +83,8 @@ public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> impl
     }
 
     @Override
-    public Integer queryOutPortSumByInportId(Long inportid) {
-        return this.outportMapper.queryOutPortSumByInportId(inportid);
+    public Integer queryOutPortSum(Long inportid, int goodsid) {
+        return this.outportMapper.queryOutPortSum(inportid, goodsid);
     }
 }
 
