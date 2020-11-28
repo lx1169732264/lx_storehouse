@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>库存预警</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="../../../lib/layui-v2.5.5/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../css/layuicmspublic.css" media="all">
+	<link rel="stylesheet" href="../../../css/public.css" media="all">
+</head>
+
+<body>
+	<div class="layuimini-container">
+		<div class="layuimini-main">
+			<!--搜索开始-->
+			<fieldset class="layui-elem-field layuimini-search">
+				<legend>搜索信息</legend>
+				<div style="margin: 10px 10px 10px 10px">
+					<form class="layui-form layui-form-pane" action="" id="searchFrm">
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">供应商</label>
+								<div class="layui-input-inline">
+									<select name="providerid" class="providerSel">
+										<option value="">请选择供应商</option>
+									</select>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label">商品名称</label>
+								<div class="layui-input-inline">
+									<input type="text" name="goodsname" autocomplete="off" class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<select name="prefix" >
+									<option value="0">超额</option>
+									<option value="1">低额</option>
+								</select>
+							</div>
+							<a class="layui-btn " lay-submit="" lay-filter="data-search-btn"><label
+									class="layui-icon layui-icon-search"></label>搜索</a>
+						</div>
+					</form>
+				</div>
+				<!--搜索结束-->
+
+				<!--表格开始-->
+				<table class="layui-hide" id="goodsTable" lay-filter="goodsTable"></table>
+				<div style="display: none;" id="goodsToolBar">
+					<a class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" lay-event="statistics">统计分析</a>
+				</div>
+				<div style="display: none;" id="goodsTableBar">
+					<a class="layui-btn layui-btn-xs layui-btn-warm btn_update" lay-event="update">修改预警值</a>
+					<!-- <a class="layui-btn layui-btn-xs layui-btn-danger btn_delete" lay-event="delete">删除</a> -->
+				</div>
+				<!--表格结束-->
+
+				<!--添加和修改的弹出层开始-->
+				<div id="addOrUpdateDiv" style="display: none;padding: 0.3125rem">
+					<form method="post" class="layui-form layui-form-pane" lay-filter="dataFrm" id="dataFrm">
+						<div class="layui-col-md12 layui-col-xs12">
+							<div class="layui-row layui-col-space10">
+								<div class="layui-inline">
+									<label class="layui-form-label">超额预警</label>
+									<div class="layui-input-inline">
+										<input type="text" name="uppernum" class="layui-input " lay-verify="required"
+											placeholder="请输入超额库存预警值">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label">低额预警</label>
+								<div class="layui-input-inline">
+									<input type="text" name="lowernum" class="layui-input " lay-verify="required"
+										placeholder="请输入低额预警预警值">
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block" style="text-align: center;">
+								<a class="layui-btn " lay-submit="" lay-filter="doSubmit"><label
+										class="layui-icon layui-icon-release"></label>提交</a>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!--添加和修改的弹出层结束-->
+
+				<div id="statisticsDiv" style="display: none;">
+					<div class="layui-card">
+						<div class="layui-card-body">
+							<input type="text" name="time" id="time" style="width: 30%;" lay-filter="time" autocomplete=" off"
+								class="layui-input" />
+							<div id="echarts-records" style="width: 100%;min-height:500px"></div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+
+	<script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+	<script src="../../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+	<script src="../../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+	<script src="../../../lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+	<script src="../../../lib/common/jquery.cookie.min.js" charset="utf-8"></script>
+	<script src="../../../lib/common/common.js" charset="utf-8"></script>
+
+	<script>
+		layui.use(['form', 'table', 'laydate', 'layer', 'echarts'], function () {
+			var form = layui.form;
+			var table = layui.table;
+			var laydate = layui.laydate;
+			var layer = layui.layer;
+			var echarts = layui.echarts;
+			var time;
+			laydate.render({
+				elem: '#losstime'
+			});
+			laydate.render({
+				elem: '#time',
+				type: 'year',
+				value: new Date(),
+				max: 0,
+				change: function (value) {
+					time = value;
+					restatistics()
+				}
+			});
+			time = $("#time").val();
+
+			//加载查询条件里面的供应商的下拉列表
+			$.get(api + "provider/getAllAvailableProvider", function (res) {
+				var search_providerid = $(".providerSel");
+				var html = "<option value =''>请选择供应商</option>";
+				var data = res.data;
+				$.each(data, function (index, item) {
+					html += "<option value =" + item.id + ">" + item.providername + "</option>"
+				});
+				search_providerid.html(html);
+				form.render("select");
+			});
+
+			var tableIns = table.render({
+				elem: '#goodsTable',
+				url: api + 'warning/loadAllWarning',
+				toolbar: "#goodsToolBar",
+				cellMinWidth: true,
+				height: 'full-220',
+				cols: [
+					[{
+							type: "radio",
+							fixed: "left",
+						},
+						{
+							field: 'id',
+							title: 'ID',
+							align: "center",
+							width: 60
+						},
+						{
+							field: 'goodsname',
+							title: '商品名称',
+							align: "center",
+							width: 150
+						},
+						{
+							field: 'size',
+							title: '规格',
+							align: "center",
+							width: 120
+						},
+						{
+							field: 'goodsimg',
+							title: '图片',
+							align: "center",
+							width: 70,
+							templet: function (d) {
+								if (d.goodsimg) {
+									return "<img width=30 height=30 src='" + baseUrl + d.goodsimg + "' />"
+								} else {
+									return "";
+								}
+							}
+						},
+						{
+							field: 'price',
+							title: '价格(￥)',
+							align: "center",
+							width: 150
+						},
+						{
+							field: 'number',
+							title: '数量',
+							align: "center",
+						},
+						{
+							field: 'uppernum',
+							title: '超额预警',
+							align: "center",
+							width: 120
+						},
+						{
+							field: 'lowernum',
+							title: '低额预警',
+							align: "center",
+							width: 120
+						},
+						{
+							title: '操作',
+							templet: '#goodsTableBar',
+							fixed: "right",
+							align: "center",
+							width: 200
+						}
+					]
+				],
+				page: true
+			});
+
+			// 监听搜索操作
+			form.on('submit(data-search-btn)', function (data) {
+				var params = $("#searchFrm").serialize();
+				//执行搜索重载
+				table.reload('goodsTable', {
+					page: {
+						curr: 1
+					},
+					url: api + 'warning/loadAllWarning?' + params
+				});
+				return false;
+			});
+
+			//监听表头的事件
+			table.on('toolbar(goodsTable)', function (obj) {
+				var checkStatus = table.checkStatus(obj.config.id);
+				switch (obj.event) {
+					case 'statistics':
+						statistics();
+						break;
+				};
+			});
+
+			//监听行数据的事件
+			table.on('tool(goodsTable)', function (obj) {
+				var data = obj.data;
+				if (obj.event === 'delete') {
+					layer.confirm('真的删除这条数据么', function (index) {
+						$.post(api + "goods/deleteGoods", {
+							id: data.id
+						}, function (res) {
+							layer.msg(res.msg);
+							obj.del();
+							layer.close(index);
+						})
+					});
+				} else if (obj.event === 'update') {
+					openUpdateGoods(data);
+				} 
+			});
+
+			//打开弹层
+			var mainIndex;
+			var url;
+			function openUpdateGoods(data) {
+				mainIndex = layer.open({
+					type: 1,
+					title: '修改[' + data.goodsname + ']商品',
+					content: $("#addOrUpdateDiv"),
+					area: ['600px', '200px'],
+					success: function (index) {
+						url = api + "goods/updateGoods";
+						//装载数据表格
+						form.val("dataFrm", data);
+					}
+				});
+			}
+
+			//提交数据
+			form.on("submit(doSubmit)", function (data) {
+				var params = $("#dataFrm").serialize();
+				$.post(url, params, function (res) {
+					layer.msg(res.msg);
+					if (res.code == 200) {
+						tableIns.reload();
+					}
+					layer.close(mainIndex);
+				})
+				return false;
+			})
+
+			//监听可用操作
+			form.on('switch(availableSwitch)', function (obj) {
+				$.post(api + "goods/updateGoods", {
+					id: this.value,
+					available: obj.elem.checked ? 1 : 0
+				}, function (res) {
+					layer.msg(res.msg);
+					tableIns.reload();
+				})
+			});
+
+			//统计分析
+			function statistics() {
+				var checkStatus = table.checkStatus('goodsTable'); //idTest 即为基础参数 id 对应的值
+				var data = checkStatus.data;
+				var length = checkStatus.data.length;
+				if (length == 0) {
+					layer.msg("请选中要统计的行数据");
+				} else {
+					var params = "&ids=" + data[0].id + ("&year=" + time);
+					mainIndex = layer.open({
+						type: 1,
+						title: '统计分析',
+						content: $("#statisticsDiv"),
+						area: ['1200px', '800px'],
+						success: function (index) {
+							var echartsRecords = echarts.init(document.getElementById('echarts-records'), 'walden');
+							var optionRecords2 = {
+								tooltip: {
+									trigger: 'axis'
+								},
+								legend: {
+									data: ['入货', '退货', '出货', '损耗']
+								},
+								grid: {
+									left: '3%',
+									right: '4%',
+									bottom: '3%',
+									containLabel: true
+								},
+								xAxis: {
+									type: 'category',
+									boundaryGap: false,
+									data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+								},
+								yAxis: {
+									type: 'value'
+								},
+							};
+							echartsRecords.setOption(optionRecords2);
+
+							$.get(api + "goods/statisticsGoods", params, function (res) {
+								echartsRecords.setOption(res);
+							})
+							// echarts 窗口缩放自适应
+							window.onresize = function () {
+								echartsRecords.resize();
+							}
+						}
+					});
+				}
+			};
+
+			//统计分析
+			function restatistics() {
+				var checkStatus = table.checkStatus('goodsTable'); //idTest 即为基础参数 id 对应的值
+				var data = checkStatus.data;
+				var params = "&ids=" + data[0].id + ("&year=" + time);
+				var echartsRecords = echarts.init(document.getElementById('echarts-records'), 'walden');
+				$.get(api + "goods/statisticsGoods", params, function (res) {
+					echartsRecords.setOption(res);
+				})
+			};
+		});
+	</script>
+</body>
+
+</html>
