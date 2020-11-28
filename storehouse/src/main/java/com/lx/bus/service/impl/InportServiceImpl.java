@@ -40,6 +40,7 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
 
     @Override
     public DataGridView queryAllInport(InportVo inportVo) {
+        inportVo.setPage(inportVo.getPage() - 1);
         return new DataGridView(inportVo.getPage().longValue(), inportMapper.queryAllInport(inportVo));
     }
 

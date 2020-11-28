@@ -11,6 +11,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,16 +34,12 @@ public class WarningServiceImpl {
         String prefix = (0 == goodsVo.getPrefix() ? Constant.UPPER_PROFIX : Constant.LOWER_PROFIX) + "*";
         List<Object> list = redisTemplate.opsForValue().multiGet(redisTemplate.keys(prefix));
 
-        if (null == list || list.get(0) == null) {
-            return new DataGridView(-1L, "没有数据");
+        if (null == list || list.size() == 0) {
+            return new DataGridView(-1L, Collections.emptyList());
         }
-        return new DataGridView(goodsVo.getLimit().longValue(), list.stream().map(i -> (Goods) i).filter(i -> {
-            boolean flag = true;
-            if (null != goodsVo.getProviderid()) {
-                flag = i.getProviderid().equals(goodsVo.getProviderid());
-            }
-            return flag;
-        }).skip(goodsVo.getLimit() * (goodsVo.getPage() - 1)).limit(goodsVo.getLimit()).collect(Collectors.toList()));
+        return new DataGridView(goodsVo.getLimit().longValue(), list.stream().map(i -> (Goods) i)
+                .filter(i -> null == goodsVo.getProviderid() || i.getProviderid().equals(goodsVo.getProviderid()))
+                .skip((long) goodsVo.getLimit() * (goodsVo.getPage() - 1)).limit(goodsVo.getLimit()).collect(Collectors.toList()));
     }
 
     public void stockWarning(Goods goods) {
@@ -53,7 +50,7 @@ public class WarningServiceImpl {
             opsForValue.set(Constant.UPPER_PROFIX + goods.getId(), goods);
         } else if (goods.getNumber() < goods.getLowernum()) {
             opsForValue.set(Constant.LOWER_PROFIX + goods.getId(), goods);
-        }else {
+        } else {
             redisTemplate.delete(Constant.UPPER_PROFIX + goods.getId());
             redisTemplate.delete(Constant.LOWER_PROFIX + goods.getId());
         }

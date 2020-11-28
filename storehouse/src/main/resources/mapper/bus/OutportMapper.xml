@@ -21,13 +21,9 @@
     </sql>
 
     <select id="queryOutPortSum" resultType="java.lang.Integer">
-    SELECT
-    outport.number
-    FROM
-    bus_outport as outport
-    WHERE
-    1 = 1
-    AND outport.inportid =#{inportid}
-    and outport.goodsid =#{goodsid}
-  </select>
+        SELECT outport.number
+        FROM bus_outport as outport
+        WHERE outport.inportid = #{inportid}
+          and outport.goodsid = #{goodsid}
+    </select>
 </mapper>

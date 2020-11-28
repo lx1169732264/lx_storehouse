@@ -36,44 +36,33 @@
         sum( inport.price ) AS priceSum
         FROM
         bus_inport AS inport
-        JOIN bus_goods AS goods ON 1 = 1
-        AND goods.id = inport.goodsid
         <if test="id != null and id != ''">
-            and inport.id like #{id}
+            where inport.id = #{id}
         </if>
-        GROUP BY
-        inport.id
-        ) AS tmp
-        on 1=1
-        and provider.id = tmp.providerid
-        <if test="id != null and id != ''">
-            and provider.id =#{providerid}
-        </if>
-        order by tmp.id desc
+        GROUP BY inport.id
+        LIMIT #{page},#{limit}
+        ) AS tmp on
+        provider.id = tmp.providerid
         LIMIT #{page},#{limit}
     </select>
 
     <select id="queryInportSum" resultType="java.lang.Integer">
-    SELECT
-    sum( inport.number )
-    FROM
-    bus_inport as inport
-    WHERE
-    1 = 1
-    AND inport.goodsid =#{id}
-    AND inport.inporttime >= #{starttime}
-    AND #{endtime} >= inport.inporttime
-  </select>
+        select ifnull(sum(tmp.number), 0)
+        from (
+                 SELECT inport.number
+                 FROM bus_inport as inport
+                 WHERE 1 = 1
+                   AND inport.goodsid = #{id}
+                   AND inport.inporttime between #{starttime} AND #{endtime}
+             ) as tmp
+    </select>
 
     <select id="loadPartInport" resultType="com.lx.bus.domain.Inport">
-    SELECT
-    *
-    FROM
-    bus_inport as inport
-    WHERE
-    1 = 1
-    AND inport.inportid =#{id}
-  </select>
+        SELECT *
+        FROM bus_inport as inport
+        WHERE 1 = 1
+          AND inport.inportid = #{id}
+    </select>
 
     <update id="updateBatch" parameterType="java.util.List">
         <!--@mbg.generated-->

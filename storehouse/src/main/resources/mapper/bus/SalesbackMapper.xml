@@ -1,164 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lx.bus.mapper.SalesbackMapper">
-  <resultMap id="BaseResultMap" type="com.lx.bus.domain.Salesback">
-    <!--@mbg.generated-->
-    <!--@Table lx_storehouse.bus_salesback-->
-    <id column="goodsid" jdbcType="INTEGER" property="goodsid" />
-    <id column="salesid" jdbcType="BIGINT" property="salesid" />
-    <result column="customerid" jdbcType="INTEGER" property="customerid" />
-    <result column="paytype" jdbcType="VARCHAR" property="paytype" />
-    <result column="salesbacktime" jdbcType="TIMESTAMP" property="salesbacktime" />
-    <result column="salebackprice" jdbcType="DOUBLE" property="salebackprice" />
-    <result column="operateperson" jdbcType="VARCHAR" property="operateperson" />
-    <result column="number" jdbcType="INTEGER" property="number" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    goodsid, salesid, customerid, paytype, salesbacktime, salebackprice, operateperson, 
-    `number`, remark, price
-  </sql>
+    <resultMap id="BaseResultMap" type="com.lx.bus.domain.Salesback">
+        <!--@mbg.generated-->
+        <!--@Table lx_storehouse.bus_salesback-->
+        <id column="goodsid" jdbcType="INTEGER" property="goodsid"/>
+        <id column="salesid" jdbcType="BIGINT" property="salesid"/>
+        <result column="customerid" jdbcType="INTEGER" property="customerid"/>
+        <result column="paytype" jdbcType="VARCHAR" property="paytype"/>
+        <result column="salesbacktime" jdbcType="TIMESTAMP" property="salesbacktime"/>
+        <result column="salebackprice" jdbcType="DOUBLE" property="salebackprice"/>
+        <result column="operateperson" jdbcType="VARCHAR" property="operateperson"/>
+        <result column="number" jdbcType="INTEGER" property="number"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        goodsid, salesid, customerid, paytype, salesbacktime, salebackprice, operateperson,
+        `number`, remark, price
+    </sql>
 
-  <select id="querySalesbackSumBySalesId" resultType="java.lang.Integer">
-    SELECT
-    sum( number )
-    FROM
-    bus_salesback
-    WHERE
-    1 = 1
-    AND salesid =#{salesid}
-  </select>
+    <select id="querySalesbackSumBySalesId" resultType="java.lang.Integer">
+        select sum(tmp.number)
+        from (
+                 SELECT number
+                 FROM bus_salesback
+                 WHERE 1 = 1
+                   AND salesid = #{salesid}
+            ) as tmp
+    </select>
 
 
-  <update id="updateBatch" parameterType="java.util.List">
-    <!--@mbg.generated-->
-    update lx_storehouse.bus_salesback
-    <trim prefix="set" suffixOverrides=",">
-      <trim prefix="customerid = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.customerid,jdbcType=INTEGER}
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update lx_storehouse.bus_salesback
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="customerid = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.customerid,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="paytype = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.paytype,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="salesbacktime = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.salesbacktime,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+            <trim prefix="salebackprice = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.salebackprice,jdbcType=DOUBLE}
+                </foreach>
+            </trim>
+            <trim prefix="operateperson = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.operateperson,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="`number` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.number,jdbcType=INTEGER}
+                </foreach>
+            </trim>
+            <trim prefix="remark = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="price = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.price,jdbcType=DOUBLE}
+                </foreach>
+            </trim>
+        </trim>
+        where goodsid in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.goodsid,jdbcType=INTEGER}
         </foreach>
-      </trim>
-      <trim prefix="paytype = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.paytype,jdbcType=VARCHAR}
+    </update>
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update lx_storehouse.bus_salesback
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="customerid = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.customerid != null">
+                        when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.customerid,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="paytype = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.paytype != null">
+                        when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.paytype,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="salesbacktime = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.salesbacktime != null">
+                        when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.salesbacktime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="salebackprice = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.salebackprice != null">
+                        when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.salebackprice,jdbcType=DOUBLE}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="operateperson = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.operateperson != null">
+                        when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.operateperson,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="`number` = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.number != null">
+                        when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.number,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.remark != null">
+                        when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="price = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    <if test="item.price != null">
+                        when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.price,jdbcType=DOUBLE}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where goodsid in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.goodsid,jdbcType=INTEGER}
         </foreach>
-      </trim>
-      <trim prefix="salesbacktime = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.salesbacktime,jdbcType=TIMESTAMP}
+    </update>
+    <insert id="batchInsert" parameterType="map">
+        <!--@mbg.generated-->
+        insert into lx_storehouse.bus_salesback
+        (goodsid, salesid, customerid, paytype, salesbacktime, salebackprice, operateperson,
+        `number`, remark, price)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.goodsid,jdbcType=INTEGER}, #{item.salesid,jdbcType=BIGINT}, #{item.customerid,jdbcType=INTEGER},
+            #{item.paytype,jdbcType=VARCHAR}, #{item.salesbacktime,jdbcType=TIMESTAMP},
+            #{item.salebackprice,jdbcType=DOUBLE},
+            #{item.operateperson,jdbcType=VARCHAR}, #{item.number,jdbcType=INTEGER}, #{item.remark,jdbcType=VARCHAR},
+            #{item.price,jdbcType=DOUBLE})
         </foreach>
-      </trim>
-      <trim prefix="salebackprice = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.salebackprice,jdbcType=DOUBLE}
-        </foreach>
-      </trim>
-      <trim prefix="operateperson = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.operateperson,jdbcType=VARCHAR}
-        </foreach>
-      </trim>
-      <trim prefix="`number` = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.number,jdbcType=INTEGER}
-        </foreach>
-      </trim>
-      <trim prefix="remark = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
-        </foreach>
-      </trim>
-      <trim prefix="price = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.price,jdbcType=DOUBLE}
-        </foreach>
-      </trim>
-    </trim>
-    where goodsid in
-    <foreach close=")" collection="list" item="item" open="(" separator=", ">
-      #{item.goodsid,jdbcType=INTEGER}
-    </foreach>
-  </update>
-  <update id="updateBatchSelective" parameterType="java.util.List">
-    <!--@mbg.generated-->
-    update lx_storehouse.bus_salesback
-    <trim prefix="set" suffixOverrides=",">
-      <trim prefix="customerid = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.customerid != null">
-            when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.customerid,jdbcType=INTEGER}
-          </if>
-        </foreach>
-      </trim>
-      <trim prefix="paytype = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.paytype != null">
-            when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.paytype,jdbcType=VARCHAR}
-          </if>
-        </foreach>
-      </trim>
-      <trim prefix="salesbacktime = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.salesbacktime != null">
-            when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.salesbacktime,jdbcType=TIMESTAMP}
-          </if>
-        </foreach>
-      </trim>
-      <trim prefix="salebackprice = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.salebackprice != null">
-            when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.salebackprice,jdbcType=DOUBLE}
-          </if>
-        </foreach>
-      </trim>
-      <trim prefix="operateperson = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.operateperson != null">
-            when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.operateperson,jdbcType=VARCHAR}
-          </if>
-        </foreach>
-      </trim>
-      <trim prefix="`number` = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.number != null">
-            when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.number,jdbcType=INTEGER}
-          </if>
-        </foreach>
-      </trim>
-      <trim prefix="remark = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.remark != null">
-            when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.remark,jdbcType=VARCHAR}
-          </if>
-        </foreach>
-      </trim>
-      <trim prefix="price = case" suffix="end,">
-        <foreach collection="list" index="index" item="item">
-          <if test="item.price != null">
-            when goodsid = #{item.goodsid,jdbcType=INTEGER} then #{item.price,jdbcType=DOUBLE}
-          </if>
-        </foreach>
-      </trim>
-    </trim>
-    where goodsid in
-    <foreach close=")" collection="list" item="item" open="(" separator=", ">
-      #{item.goodsid,jdbcType=INTEGER}
-    </foreach>
-  </update>
-  <insert id="batchInsert" parameterType="map">
-    <!--@mbg.generated-->
-    insert into lx_storehouse.bus_salesback
-    (goodsid, salesid, customerid, paytype, salesbacktime, salebackprice, operateperson, 
-      `number`, remark, price)
-    values
-    <foreach collection="list" item="item" separator=",">
-      (#{item.goodsid,jdbcType=INTEGER}, #{item.salesid,jdbcType=BIGINT}, #{item.customerid,jdbcType=INTEGER}, 
-        #{item.paytype,jdbcType=VARCHAR}, #{item.salesbacktime,jdbcType=TIMESTAMP}, #{item.salebackprice,jdbcType=DOUBLE}, 
-        #{item.operateperson,jdbcType=VARCHAR}, #{item.number,jdbcType=INTEGER}, #{item.remark,jdbcType=VARCHAR}, 
-        #{item.price,jdbcType=DOUBLE})
-    </foreach>
-  </insert>
+    </insert>
 </mapper>

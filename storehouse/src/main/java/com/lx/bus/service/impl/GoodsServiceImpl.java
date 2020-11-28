@@ -71,7 +71,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         Goods selectById = this.goodsMapper.selectById(goods.getId());
         BeanUtil.copyProperties(goods,selectById, CopyOptions.create().setIgnoreNullValue(true).setIgnoreError(true));
         this.goodsMapper.updateById(selectById);
-        warningService.stockWarning(goods);
+        warningService.stockWarning(selectById);
         return selectById;
     }
 

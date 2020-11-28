@@ -62,7 +62,7 @@
 					<div class="layui-inline">
 						<label class="layui-form-label">进货数量</label>
 						<div class="layui-input-inline">
-							<input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+							<input type="text" name="Number" lay-verify="required|integer" autocomplete="off" class="layui-input">
 						</div>
 					</div>
 					<div class="layui-inline">
@@ -182,6 +182,13 @@
 				page: true
 			});
 
+			form.verify({
+				integer: [
+					/^[1-9]\d*$/
+					, '只能输入正整数'
+				]
+			});
+
 			// 监听搜索操作
 			form.on('submit(data-search-btn)', function (data) {
 				var params = $("#searchFrm").serialize();
@@ -263,7 +270,7 @@
 						layer = layui.layer,
 						miniTab = layui.miniTab;
 					$.get(api + "id/generate", function (res) {
-						// 打开新的窗口 
+						// 打开新的窗口
 						miniTab.openNewTabByIframe({
 							href: "./resources/page/business/inport/inportOrder.html?id=" + res.id,
 						});
@@ -276,7 +283,7 @@
 					var form = layui.form,
 						layer = layui.layer,
 						miniTab = layui.miniTab;
-					// 打开新的窗口 
+					// 打开新的窗口
 					miniTab.openNewTabByIframe({
 						href: "./resources/page/business/inport/inportOrder.html" + "?id=" + data.id + "&providerid=" +
 							data.providerid,

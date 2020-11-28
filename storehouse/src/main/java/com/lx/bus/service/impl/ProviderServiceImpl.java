@@ -36,13 +36,8 @@ public class ProviderServiceImpl extends ServiceImpl<ProviderMapper, Provider> i
         qw.like(StringUtils.isNotBlank(providerVo.getProvidername()),"providername",providerVo.getProvidername());
         qw.like(StringUtils.isNotBlank(providerVo.getConnectionperson()),"connectionperson",providerVo.getConnectionperson());
         if(StringUtils.isNotBlank(providerVo.getPhone())){
-            qw.and(new Consumer<QueryWrapper<Provider>>() {
-                @Override
-                public void accept(QueryWrapper<Provider> providerQueryWrapper) {
-                    providerQueryWrapper.like(StringUtils.isNotBlank(providerVo.getPhone()),"phone",providerVo.getPhone())
-                            .or().like(StringUtils.isNotBlank(providerVo.getPhone()),"telephone",providerVo.getPhone());
-                }
-            });
+            qw.and(providerQueryWrapper -> providerQueryWrapper.like(StringUtils.isNotBlank(providerVo.getPhone()),"phone",providerVo.getPhone())
+                    .or().like(StringUtils.isNotBlank(providerVo.getPhone()),"telephone",providerVo.getPhone()));
         }
         this.providerMapper.selectPage(page,qw);
         return new DataGridView(page.getTotal(),page.getRecords());
@@ -79,8 +74,8 @@ public class ProviderServiceImpl extends ServiceImpl<ProviderMapper, Provider> i
         return super.removeById(id);
     }
 
-    @Cacheable(cacheNames = "com.lx.bus.service.impl.ProviderServiceImpl",key = "#id")
     @Override
+    @Cacheable(cacheNames = "com.lx.bus.service.impl.ProviderServiceImpl",key = "#id")
     public Provider getById(Serializable id) {
         return super.getById(id);
     }

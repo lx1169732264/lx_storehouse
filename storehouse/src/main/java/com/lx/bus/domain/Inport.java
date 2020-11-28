@@ -49,6 +49,7 @@ public class Inport implements Serializable {
     @ApiModelProperty(value="")
     private String operateperson;
 
+
     @TableField(value = "number")
     @ApiModelProperty(value="")
     private Integer number;

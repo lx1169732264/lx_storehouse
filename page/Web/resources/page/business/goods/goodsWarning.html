@@ -62,11 +62,12 @@
 				<!--添加和修改的弹出层开始-->
 				<div id="addOrUpdateDiv" style="display: none;padding: 0.3125rem">
 					<form method="post" class="layui-form layui-form-pane" lay-filter="dataFrm" id="dataFrm">
-						<div class="layui-col-md12 layui-col-xs12">
+
 							<div class="layui-row layui-col-space10">
 								<div class="layui-inline">
 									<label class="layui-form-label">超额预警</label>
 									<div class="layui-input-inline">
+										<input type="hidden" name="id" >
 										<input type="text" name="uppernum" class="layui-input " lay-verify="required"
 											placeholder="请输入超额库存预警值">
 									</div>
@@ -79,7 +80,7 @@
 										placeholder="请输入低额预警预警值">
 								</div>
 							</div>
-						</div>
+
 						<div class="layui-form-item">
 							<div class="layui-input-block" style="text-align: center;">
 								<a class="layui-btn " lay-submit="" lay-filter="doSubmit"><label
@@ -281,7 +282,7 @@
 			}
 
 			//提交数据
-			form.on("submit(doSubmit)", function (data) {
+			form.on("submit(doSubmit)", function () {
 				var params = $("#dataFrm").serialize();
 				$.post(url, params, function (res) {
 					layer.msg(res.msg);
@@ -291,7 +292,7 @@
 					layer.close(mainIndex);
 				})
 				return false;
-			})
+			});
 
 			//监听可用操作
 			form.on('switch(availableSwitch)', function (obj) {

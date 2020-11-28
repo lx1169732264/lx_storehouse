@@ -78,6 +78,9 @@ public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> impl
         List<Outport> records = page.getRecords();
         for (Outport record : records) {
             record.setProvidername(this.providerService.getById(record.getProviderid()).getProvidername());
+            Goods goods = this.goodsService.getById(record.getGoodsid());
+            record.setGoodsname(goods.getGoodsname());
+            record.setSize(goods.getSize());
         }
         return new DataGridView(page.getTotal(), records);
     }
