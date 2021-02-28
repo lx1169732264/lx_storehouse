@@ -1,19 +1,10 @@
 //package com.lx.sys.config;
 //
-//import com.alibaba.fastjson.JSON;
 //import com.lx.bus.domain.Goods;
-//import com.lx.bus.domain.Inport;
-//import com.lx.bus.service.GoodsService;
-//import com.lx.bus.vo.InportVo;
 //import com.lx.sys.common.Constant;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 //import org.aspectj.lang.ProceedingJoinPoint;
-//import org.aspectj.lang.annotation.After;
 //import org.aspectj.lang.annotation.Around;
 //import org.aspectj.lang.annotation.Aspect;
-//import org.springframework.beans.BeanUtils;
-//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.EnableAspectJAutoProxy;
 //import org.springframework.data.redis.core.RedisTemplate;
 //import org.springframework.data.redis.core.ValueOperations;
@@ -22,8 +13,6 @@
 //import org.springframework.stereotype.Component;
 //
 //import javax.annotation.Resource;
-//import java.io.Serializable;
-//import java.util.Collection;
 //
 ///**
 // * 库存量切入

@@ -18,8 +18,8 @@ import java.util.Date;
 /**
  * @author lx
  */
-@RequestMapping("inport")
-//@RequestMapping("api/inport")
+//@RequestMapping("inport")
+@RequestMapping("api/inport")
 @RestController
 public class InportController {
 

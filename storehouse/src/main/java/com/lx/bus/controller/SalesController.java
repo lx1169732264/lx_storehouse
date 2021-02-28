@@ -19,8 +19,8 @@ import java.util.Date;
 /**
  * @author lx
  **/
-@RequestMapping("sales")
-//@RequestMapping("api/sales")
+//@RequestMapping("sales")
+@RequestMapping("api/sales")
 @RestController
 public class SalesController {
 

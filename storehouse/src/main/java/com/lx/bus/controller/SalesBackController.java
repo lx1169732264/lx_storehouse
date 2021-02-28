@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author lx
  */
-@RequestMapping("salesback")
-//@RequestMapping("api/salesback")
+//@RequestMapping("salesback")
+@RequestMapping("api/salesback")
 @RestController
 public class SalesBackController {
 

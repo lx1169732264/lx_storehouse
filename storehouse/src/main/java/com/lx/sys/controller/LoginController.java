@@ -33,8 +33,8 @@ import java.util.concurrent.TimeUnit;
  * @author lx
  */
 @RestController
-@RequestMapping("login")
-//@RequestMapping("api/login")
+//@RequestMapping("login")
+@RequestMapping("api/login")
 public class LoginController {
 
     @Autowired
@@ -59,7 +59,6 @@ public class LoginController {
                 ActiveUser activeUser = (ActiveUser) subject.getPrincipal();
                 //得到shiro的sessionId 也就是token
                 String token = subject.getSession().getId().toString();
-                System.out.println();
                 //记录登录日志
                 User user = activeUser.getUser();
                 Loginfo loginfo = new Loginfo();

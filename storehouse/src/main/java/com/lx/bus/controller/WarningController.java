@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("warning")
-//@RequestMapping("api/warning")
+//@RequestMapping("warning")
+@RequestMapping("api/warning")
 @RestController
 public class WarningController {
 

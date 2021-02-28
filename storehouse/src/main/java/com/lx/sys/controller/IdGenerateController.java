@@ -12,8 +12,8 @@ import java.util.Map;
  * 分布式雪花算法id生成
  */
 @RestController
-@RequestMapping("id")
-//@RequestMapping("api/id")
+//@RequestMapping("id")
+@RequestMapping("api/id")
 public class IdGenerateController {
 
     @GetMapping("generate")

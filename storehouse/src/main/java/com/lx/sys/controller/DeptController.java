@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author: lx
  **/
 @RestController
-@RequestMapping("dept")
-//@RequestMapping("api/dept")
+//@RequestMapping("dept")
+@RequestMapping("api/dept")
 public class DeptController {
 
     @Autowired
