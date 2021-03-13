@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author lx
  */
-//@RequestMapping("loss")
-@RequestMapping("api/loss")
+@RequestMapping("{SYSTEM_ENV}loss")
+//@RequestMapping("api/loss")
 @RestController
 public class LossController {
 

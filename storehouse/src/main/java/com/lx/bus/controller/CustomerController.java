@@ -19,7 +19,7 @@ import java.util.List;
  * @author lx
  **/
 //@RequestMapping("customer")
-@RequestMapping("api/customer")
+@RequestMapping("{SYSTEM_ENV}customer")
 @RestController
 public class CustomerController {
 

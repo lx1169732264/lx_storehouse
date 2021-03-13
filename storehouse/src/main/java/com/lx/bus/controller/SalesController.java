@@ -20,7 +20,7 @@ import java.util.Date;
  * @author lx
  **/
 //@RequestMapping("sales")
-@RequestMapping("api/sales")
+@RequestMapping("{SYSTEM_ENV}sales")
 @RestController
 public class SalesController {
 

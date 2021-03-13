@@ -22,7 +22,7 @@ import java.util.List;
  * @author: lx
  **/
 //@RequestMapping("notice")
-@RequestMapping("api/notice")
+@RequestMapping("{SYSTEM_ENV}notice")
 @RestController
 public class NoticeController {
 

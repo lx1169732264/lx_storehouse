@@ -1,3 +1,6 @@
+SYSTEM_ENV: ""
+#SYSTEM_ENV: "api/"
+contentSecurityPolicy : "default-src 'self' 'unsafe-inline'"
 server:
   port: 1169
 spring:
@@ -14,7 +17,8 @@ spring:
       validation-query: select 1
       stat-view-servlet:
         enabled: true
-        url-pattern: "/druid/*"
+        url-pattern: /druid/*
+        reset-enable: true
       web-stat-filter:
         enabled: true
         url-pattern: "/druid/**"
@@ -45,25 +49,26 @@ shiro:
   login-url: /index.html
   unauthorized-url: /unauthorized.html
   anon-urls:
-#      - /login/doLogin*
-#      - /druid/**
-#      - /swagger-ui.html
-#      - /webjars/**
-#      - /swagger-resources/**
-#      - /v2/**
-#      - /login/captcha
-#      - /login/checkLogin
+      - /**
+      - /login/doLogin*
+      - /druid/**
+      - /swagger-ui.html
+      - /webjars/**
+      - /swagger-resources/**
+      - /v2/**
+      - /login/captcha
+      - /login/checkLogin
       - /api/login/doLogin*
-      - /api/druid/**
-      - /api/swagger-ui.html
-      - /api/webjars/**
-      - /api/swagger-resources/**
-      - /api/v2/**
+      - /druid/**
+      - /swagger-ui.html
+      - /webjars/**
+      - /swagger-resources/**
+      - /v2/**
       - /api/login/captcha
       - /api/login/checkLogin
   logout-url: /api/login/logout*
   authc-urls:
-    - /**
+#    - /**
 #mybatisplus的配置
 mybatis-plus:
   configuration:

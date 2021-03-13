@@ -1,11 +1,11 @@
 package com.lx.sys.service;
 
+import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.domain.Menu;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.lx.sys.vo.MenuVo;
-
-import java.util.List;
 
 /**
  * @author lx

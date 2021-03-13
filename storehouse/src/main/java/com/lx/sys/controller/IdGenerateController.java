@@ -13,7 +13,7 @@ import java.util.Map;
  */
 @RestController
 //@RequestMapping("id")
-@RequestMapping("api/id")
+@RequestMapping("{SYSTEM_ENV}id")
 public class IdGenerateController {
 
     @GetMapping("generate")

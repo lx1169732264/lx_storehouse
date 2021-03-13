@@ -20,7 +20,7 @@ import java.util.List;
  **/
 @RestController
 //@RequestMapping("role")
-@RequestMapping("api/role")
+@RequestMapping("{SYSTEM_ENV}role")
 public class RoleController {
 
     @Autowired

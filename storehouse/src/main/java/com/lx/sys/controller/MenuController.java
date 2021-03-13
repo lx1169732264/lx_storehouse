@@ -19,7 +19,7 @@ import java.util.List;
  **/
 @RestController
 //@RequestMapping("menu")
-@RequestMapping("api/menu")
+@RequestMapping("{SYSTEM_ENV}menu")
 public class MenuController {
 
     @Autowired

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 //@RequestMapping("warning")
-@RequestMapping("api/warning")
+@RequestMapping("{SYSTEM_ENV}warning")
 @RestController
 public class WarningController {
 

@@ -39,17 +39,17 @@ public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> impl
     public ResultObj saveOutport(Outport outport) {
         QueryWrapper<Outport> qw2 = new QueryWrapper<>();
         qw2.eq(Outport.COL_INPORTID, outport.getInportid()).eq(Outport.COL_GOODSID, outport.getGoodsid());
-        Outport one = outportMapper.selectOne(qw2);
+        Outport old = outportMapper.selectOne(qw2);
 
-        if (null != one) {
-            int sum = one.getNumber() + outport.getNumber();
+        if (null != old) {
+            int sum = old.getNumber() + outport.getNumber();
             if (sum > outport.getInportNum()) {
                 return new ResultObj(-1, "退货失败!退货总数:" + sum + ",超过进货数量:" + outport.getInportNum());
             }
-            one.setNumber(sum);
+            old.setNumber(sum);
             UpdateWrapper<Outport> qw3 = new UpdateWrapper<>();
-            qw3.eq("inportid", one.getInportid()).eq("goodsid", one.getGoodsid());
-            this.outportMapper.update(one, qw3);
+            qw3.eq("inportid", old.getInportid()).eq("goodsid", old.getGoodsid());
+            this.outportMapper.update(old, qw3);
         } else {
             ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
             outport.setOperateperson(activeUser.getUser().getName());

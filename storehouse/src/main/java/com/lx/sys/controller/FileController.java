@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @RestController
 //@RequestMapping("file")
-@RequestMapping("api/file")
+@RequestMapping("{SYSTEM_ENV}file")
 public class FileController {
 
     @Autowired

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 //@RequestMapping("dept")
-@RequestMapping("api/dept")
+@RequestMapping("{SYSTEM_ENV}dept")
 public class DeptController {
 
     @Autowired

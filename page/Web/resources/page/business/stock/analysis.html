@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>系统商品</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../css/layuicmspublic.css" media="all">
+    <link rel="stylesheet" href="../../../css/public.css" media="all">
+</head>
+<style>
+    .top-panel {
+        border: 1px solid #eceff9;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .top-panel>.layui-card-body {
+        height: 60px;
+    }
+
+    .top-panel-number {
+        line-height: 60px;
+        font-size: 30px;
+        border-right: 1px solid #eceff9;
+    }
+
+    .top-panel-tips {
+        line-height: 30px;
+        font-size: 16px;
+        margin-top: 16px;
+    }
+</style>
+
+<body>
+    <fieldset class="layui-elem-field layuimini-search">
+        <legend>搜索信息</legend>
+        <div style="margin: 10px 10px 10px 10px">
+            <form class="layui-form layui-form-pane" action="" id="searchFrm">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">供应商</label>
+                        <div class="layui-input-inline">
+                            <select name="providerid" id="data_providerid" lay-filter="data_providerid"
+                                class="providerSel">
+                                <option value="">请选择供应商</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商品名称</label>
+                        <div class="layui-input-inline">
+                            <select name="id" id="data_goodsid" class="goodsDataSel">
+                                <option value="">请选择商品</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">供应商</label>
+                        <div class="layui-input-inline">
+                            <select name="providerid" id="data_providerid2" lay-filter="data_providerid2"
+                                class="providerSel2">
+                                <option value="">请选择供应商</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商品名称</label>
+                        <div class="layui-input-inline">
+                            <select name="id" id="data_goodsid2" class="goodsDataSel2">
+                                <option value="">请选择商品</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <input type="text" name="time" id="time" style="width: 30%;" lay-filter="time" autocomplete=" off"
+                        class="layui-input" />
+                    <div class="layui-inline" style="text-align: center;">
+                        <a class="layui-btn " lay-submit="" lay-filter="data-search-btn"><label
+                                class="layui-icon layui-icon-search"></label>对比</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
+    <div class="layuimini-container layui-anim layui-anim-upbit">
+        <div class="layuimini-main welcome">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12 layui-col-md3 layui-card top-panel">
+                    <div class="layui-card-header">商品1平均单价</div>
+                    <div class="layui-card-body">
+                        <div class="layui-row layui-col-space5">
+                            <div class="layui-col-xs9 layui-col-md9 top-panel-number">
+                                9,054,056
+                            </div>
+                            <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
+                                <a {{ true ? ' style="color: #1aa094" ' : ' style="color: #bd3004" ' }}>▲0.12</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-col-xs12 layui-col-md3 layui-card top-panel">
+                    <div class="layui-card-header">商品1平均利润</div>
+                    <div class="layui-card-body">
+                        <div class="layui-row layui-col-space5">
+                            <div class="layui-col-xs9 layui-col-md9 top-panel-number">
+                                9,054,056
+                            </div>
+                            <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
+                                <a {{ true ? ' style="color: #1aa094" ' : ' style="color: #bd3004" ' }}>▲0.12</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs12 layui-col-md3 layui-card top-panel">
+                    <div class="layui-card-header">商品2平均单价</div>
+                    <div class="layui-card-body">
+                        <div class="layui-row layui-col-space5">
+                            <div class="layui-col-xs9 layui-col-md9 top-panel-number">
+                                9,054,056
+                            </div>
+                            <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
+                                <a {{ true ? ' style="color: #1aa094" ' : ' style="color: #bd3004" ' }}>▲0.12</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs12 layui-col-md3 layui-card top-panel">
+                    <div class="layui-card-header">商品2平均利润</div>
+                    <div class="layui-card-body">
+                        <div class="layui-row layui-col-space5">
+                            <div class="layui-col-xs9 layui-col-md9 top-panel-number">
+                                9,054,056
+                            </div>
+                            <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
+                                <a {{ true ? ' style="color: #1aa094" ' : ' style="color: #bd3004" ' }}>▲0.12</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs12 layui-col-md3">
+                    <div id="echarts-pies" style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+                </div>
+                <div class="layui-col-xs12 layui-col-md9">
+                    <div id="echarts-map" style="background-color:#ffffff;min-height:300px;padding: 10px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="../../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+    <script src="../../../lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+    <script src="../../../lib/common/jquery.cookie.min.js" charset="utf-8"></script>
+    <script src="../../../lib/common/common.js" charset="utf-8"></script>
+    <script>
+        layui.use(['layer', 'echarts', 'form', 'table', 'laydate', 'layer'], function () {
+            var form = layui.form;
+            var table = layui.table;
+            var laydate = layui.laydate;
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var echarts = layui.echarts;
+            var time = 2021;
+            laydate.render({
+                elem: '#time',
+                type: 'year',
+                value: new Date(),
+                max: 0,
+                change: function (value) {
+                    time = value;
+                }
+            });
+
+            //加载查询条件里面的供应商的下拉列表
+            $.get(api + "provider/getAllAvailableProvider", function (res) {
+                var search_providerid = $(".providerSel");
+                var html = "<option value =''>请选择供应商</option>";
+                var data = res.data;
+                $.each(data, function (index, item) {
+                    html += "<option value =" + item.id + ">" + item.providername + "</option>"
+                });
+                search_providerid.html(html);
+                form.render("select");
+            });
+
+            //监听添加弹出层里面的供应商的下拉改变事件
+            form.on("select(data_providerid)", function (obj) {
+                var providerid = obj.value;
+                var goodsDataSel = $(".goodsDataSel");
+                initGoodsSeleted(providerid, goodsDataSel)
+            })
+
+            function initGoodsSeleted(providerid, elem, fun) {
+                var html = "<option value =''>请选择商品</option>";
+                if (providerid != "") {
+                    $.get(api + "goods/getGoodsByProviderId", {
+                        providerid: providerid
+                    }, function (res) {
+                        var data = res.data;
+                        $.each(data, function (i, item) {
+                            html += "<option value =" + item.id + ">" + item.goodsname + "[" +
+                                item.size + "]" + "</option>"
+                        });
+                        elem.html(html);
+                        form.render("select");
+                        if (fun != undefined) {
+                            fun();
+                        }
+                    })
+                } else {
+                    elem.html(html);
+                    form.render("select");
+                }
+            }
+
+            //加载查询条件里面的供应商的下拉列表
+            $.get(api + "provider/getAllAvailableProvider", function (res) {
+                var search_providerid = $(".providerSel2");
+                var html = "<option value =''>请选择供应商</option>";
+                var data = res.data;
+                $.each(data, function (index, item) {
+                    html += "<option value =" + item.id + ">" + item.providername + "</option>"
+                });
+                search_providerid.html(html);
+                form.render("select");
+            });
+
+            //监听添加弹出层里面的供应商的下拉改变事件
+            form.on("select(data_providerid2)", function (obj) {
+                var providerid = obj.value;
+                var goodsDataSel = $(".goodsDataSel2");
+                initGoodsSeleted2(providerid, goodsDataSel)
+            })
+
+            function initGoodsSeleted2(providerid, elem, fun) {
+                var html = "<option value =''>请选择商品</option>";
+                if (providerid != "") {
+                    $.get(api + "goods/getGoodsByProviderId", {
+                        providerid: providerid
+                    }, function (res) {
+                        var data = res.data;
+                        $.each(data, function (i, item) {
+                            html += "<option value =" + item.id + ">" + item.goodsname + "[" +
+                                item.size + "]" + "</option>"
+                        });
+                        elem.html(html);
+                        form.render("select");
+                        if (fun != undefined) {
+                            fun();
+                        }
+                    })
+                } else {
+                    elem.html(html);
+                    form.render("select");
+                }
+            }
+
+            /**
+             * 玫瑰图表
+             */
+            var echartsPies = echarts.init(document.getElementById('echarts-pies'), 'walden');
+            var optionPies = {
+                title: {
+                    text: '指标名称-玫瑰图',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                },
+                series: [{
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    roseType: 'radius',
+                    data: [{
+                            value: 335,
+                            name: '出货'
+                        },
+                        {
+                            value: 310,
+                            name: '退货'
+                        },
+                        {
+                            value: 234,
+                            name: '联盟广告'
+                        },
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+            echartsPies.setOption(optionPies);
+
+
+            var echartsMap = echarts.init(document.getElementById('echarts-map'), 'walden');
+
+            var optionRecords2 = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['入货', '退货', '出货', '损耗']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+            };
+            echartsMap.setOption(optionRecords2);
+
+            var params = "&ids=" + 1 + ("&year=" + time);
+            $.get(api + "goods/statisticsGoods", params, function (res) {
+                echartsMap.setOption(res);
+            })
+        });
+    </script>
+</body>
+
+</html>

@@ -42,6 +42,7 @@ if(usertype==1){
 	if(pers!=null){
 		var permissions=pers.split(",");
 
+
 		//部门权限开始
 		if(permissions.indexOf("dept:add")<0){
 			$(".btn_add").hide();
@@ -84,6 +85,7 @@ if(usertype==1){
 		//客户权限
 		if(permissions.indexOf("customer:add")<0){
 			$(".customer_add").hide();
+$(".btn_kc").hide();
 		}
 		if(permissions.indexOf("customer:update")<0){
 			$(".customer_update").hide();

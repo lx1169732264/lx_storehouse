@@ -1,16 +1,16 @@
 package com.lx.sys.controller;
 
-import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.ShearCaptcha;
-import com.lx.sys.common.ActiveUser;
-import com.lx.sys.common.Constant;
-import com.lx.sys.common.MenuTreeNode;
-import com.lx.sys.common.ResultObj;
-import com.lx.sys.domain.Loginfo;
-import com.lx.sys.domain.Menu;
-import com.lx.sys.domain.User;
-import com.lx.sys.service.LoginfoService;
-import com.lx.sys.service.MenuService;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -23,18 +23,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import com.lx.sys.common.ActiveUser;
+import com.lx.sys.common.Constant;
+import com.lx.sys.common.MenuTreeNode;
+import com.lx.sys.common.ResultObj;
+import com.lx.sys.domain.Loginfo;
+import com.lx.sys.domain.Menu;
+import com.lx.sys.domain.User;
+import com.lx.sys.service.LoginfoService;
+import com.lx.sys.service.MenuService;
+
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.ShearCaptcha;
 
 /**
  * @author lx
  */
 @RestController
-//@RequestMapping("login")
-@RequestMapping("api/login")
+@RequestMapping("login")
+//@RequestMapping("{SYSTEM_ENV}login")
 public class LoginController {
 
     @Autowired

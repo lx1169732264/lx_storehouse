@@ -16,7 +16,7 @@ import java.util.List;
  **/
 @RestController
 //@RequestMapping("loginfo")
-@RequestMapping("api/loginfo")
+@RequestMapping("{SYSTEM_ENV}loginfo")
 public class LoginfoController {
 
     @Autowired

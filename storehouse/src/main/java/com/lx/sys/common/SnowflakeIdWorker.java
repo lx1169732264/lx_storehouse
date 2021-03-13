@@ -179,4 +179,6 @@ public class SnowflakeIdWorker {
             System.out.println(id);
         }
     }
+
+
 }

@@ -1,6 +1,5 @@
 package com.lx.bus.controller;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lx.bus.domain.Goods;
 import com.lx.bus.domain.Loss;
@@ -13,6 +12,7 @@ import com.lx.bus.vo.SeriesVo;
 import com.lx.sys.common.Constant;
 import com.lx.sys.common.DataGridView;
 import com.lx.sys.common.ResultObj;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +21,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
-
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author lx
  */
-//@RequestMapping("goods")
-@RequestMapping("api/goods")
+@RequestMapping("{SYSTEM_ENV}goods")
+//@RequestMapping("api/goods")
 @RestController
 public class GoodsController {
 
@@ -39,6 +42,8 @@ public class GoodsController {
     private LossService lossService;
     @Autowired
     private ProviderService providerService;
+
+    ExecutorService pool = Executors.newFixedThreadPool(20);
 
     @GetMapping("loadAllGoods")
     public Object loadAllGoods(GoodsVo goodsVo) {
@@ -63,7 +68,7 @@ public class GoodsController {
     public ResultObj updateGoods(Goods goods) {
         try {
             this.goodsService.updateGoods(goods);
-            return ResultObj.UPDATE_SUCCESS;
+            return new ResultObj(goods);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
@@ -90,7 +95,6 @@ public class GoodsController {
         return this.goodsService.getAllAvailableGoods();
     }
 
-
     /**
      * 根据供应商ID查询商品信息
      */
@@ -112,26 +116,33 @@ public class GoodsController {
      */
     @GetMapping("statisticsGoods")
     @RequiresPermissions("goods:statistics")
-    public Map<String, Object> statisticsGoods(Integer[] ids, Integer year) {
+    public Map<String, Object> statisticsGoods(Integer[] ids, Integer year) throws InterruptedException {
         List<Integer> inportList = new ArrayList<>();
         List<Integer> outportList = new ArrayList<>();
         List<Integer> saleList = new ArrayList<>();
         List<Integer> lossList = new ArrayList<>();
+        CountDownLatch countDownLatch = new CountDownLatch(12);
+
         for (int i = 0; i < 12; i++) {
-            Date startTime = new Date(year - 1900, i, 1);
-            Date endTime = new Date(year - 1900, i + 1, 1);
-            Integer in = inportService.queryInportSum(ids[0], startTime, endTime);
-            inportList.add(null == in ? 0 : in);
+            int finalI = i;
+            pool.submit(() -> {
+                Date startTime = new Date(year - 1900, finalI, 1);
+                Date endTime = new Date(year - 1900, finalI + 1, 1);
+                Integer in = inportService.queryInportSum(ids[0], startTime, endTime);
+                inportList.add(null == in ? 0 : in);
 
-            Integer out = goodsService.queryOutportSum(ids[0], startTime, endTime);
-            outportList.add(null == out ? 0 : out);
+                Integer out = goodsService.queryOutportSum(ids[0], startTime, endTime);
+                outportList.add(null == out ? 0 : out);
 
-            Integer sale = goodsService.querySaleSum(ids[0], startTime, endTime);
-            saleList.add(null == sale ? 0 : sale);
+                Integer sale = goodsService.querySaleSum(ids[0], startTime, endTime);
+                saleList.add(null == sale ? 0 : sale);
 
-            Integer loss = goodsService.queryLossSum(ids[0], startTime, endTime);
-            lossList.add(null == loss ? 0 : loss);
+                Integer loss = goodsService.queryLossSum(ids[0], startTime, endTime);
+                lossList.add(null == loss ? 0 : loss);
+                countDownLatch.countDown();
+            });
         }
+        countDownLatch.await();
 
         List<SeriesVo> seriesList = new ArrayList<>();
         seriesList.add(new SeriesVo("入货", "line", inportList));
@@ -139,6 +150,35 @@ public class GoodsController {
         seriesList.add(new SeriesVo("出货", "line", saleList));
         seriesList.add(new SeriesVo("损耗", "line", lossList));
         Map<String, Object> res = new HashMap<>(8);
+        res.put("series", seriesList);
+        return res;
+    }
+
+    @GetMapping("statisticsInport")
+    @RequiresPermissions("goods:statistics")
+    public Map<String, Object> statisticsInport(Integer[] ids, Integer year) throws InterruptedException {
+        List<Integer> inportList = new ArrayList<>();
+        List<Integer> inportList2 = new ArrayList<>();
+        CountDownLatch countDownLatch = new CountDownLatch(12);
+
+        for (int i = 0; i < 12; i++) {
+            int finalI = i;
+            pool.submit(() -> {
+                Date startTime = new Date(year - 1900, finalI, 1);
+                Date endTime = new Date(year - 1900, finalI + 1, 1);
+                Integer in = inportService.queryInportSum(ids[0], startTime, endTime);
+                Integer in2 = inportService.queryInportSum(ids[0], startTime, endTime);
+                inportList.add(null == in ? 0 : in);
+                inportList.add(null == in2 ? 0 : in2);
+                countDownLatch.countDown();
+            });
+        }
+        countDownLatch.await();
+
+        List<SeriesVo> seriesList = new ArrayList<>();
+        seriesList.add(new SeriesVo(goodsService.getById(ids[0]).getGoodsname(), "line", inportList));
+        seriesList.add(new SeriesVo(goodsService.getById(ids[1]).getGoodsname(), "line", inportList2));
+        Map<String, Object> res = new HashMap<>(4);
         res.put("series", seriesList);
         return res;
     }

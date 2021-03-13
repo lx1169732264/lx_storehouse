@@ -15,9 +15,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * @author lx
- */
 @ApiModel(value = "com-lx-sys-domain-User")
 @Data
 @AllArgsConstructor
